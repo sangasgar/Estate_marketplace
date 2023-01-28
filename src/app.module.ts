@@ -5,6 +5,11 @@ import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import configuration from './config/configuration';
 import { SequelizeModule } from '@nestjs/sequelize';
+import { Users } from './user/models/user.model';
+import { AuthModule } from './auth/auth.module';
+import { TokenService } from './token/token.service';
+import { TokenModule } from './token/token.module';
+import { JwtService } from '@nestjs/jwt';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -21,11 +26,13 @@ import { SequelizeModule } from '@nestjs/sequelize';
         database: configService.get('db_name'),
         synchronize: true,
         autoLoadModels: true,
-        models: [],
+        models: [Users],
       }),
       inject: [ConfigService],
     }),
     UserModule,
+    AuthModule,
+    TokenModule,
   ],
   controllers: [AppController],
   providers: [AppService],
