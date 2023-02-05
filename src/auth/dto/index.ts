@@ -1,4 +1,5 @@
 import { IsString } from 'class-validator';
+import { IsArray } from 'sequelize-typescript';
 
 export class LoginDTO {
   @IsString()

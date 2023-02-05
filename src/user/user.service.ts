@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { Users } from './models/user.model';
 import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
-import { CreateUserDTO } from './dto';
+import { CreateUserDTO, UpdateUsername } from './dto';
 @Injectable()
 export class UserService {
   constructor(
@@ -25,6 +25,28 @@ export class UserService {
       password: dto.password,
       phone: dto.phone,
     });
+    return dto;
+  }
+  async updateUser(dto: UpdateUsername): Promise<UpdateUsername> {
+    if (dto.user.username) {
+      this.userRepository.update(
+        { username: dto.user.username },
+        { where: { email: dto.email } },
+      );
+    }
+    if (dto.user.password) {
+      dto.user.password = await this.hashPassword(dto.user.password);
+      this.userRepository.update(
+        { password: dto.user.password },
+        { where: { email: dto.email } },
+      );
+    }
+    if (dto.user.phone) {
+      this.userRepository.update(
+        { phone: dto.user.phone },
+        { where: { email: dto.email } },
+      );
+    }
     return dto;
   }
 }

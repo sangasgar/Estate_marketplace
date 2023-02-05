@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { AppError } from 'src/common/constant/error';
 import { TokenService } from 'src/token/token.service';
-import { CreateUserDTO } from 'src/user/dto';
+import { CreateUserDTO, UpdateUsername } from 'src/user/dto';
 import { UserService } from 'src/user/user.service';
 import { LoginDTO } from './dto';
 import { AuthResponce } from './responce';
@@ -30,11 +30,29 @@ export class AuthService {
     const validateUser = await bcrypt.compare(dto.password, user.password);
     if (!validateUser)
       throw new BadRequestException(AppError.USER_WRONG_PASSWORD);
-    const token = await this.tokenService.generateJWT(dto.email);
+    const userData = {
+      username: user.username,
+      email: user.email,
+    };
+    const token = await this.tokenService.generateJWT(userData);
     return {
       username: user.username,
       email: user.email,
       phone: user.phone,
+      token,
+    };
+  }
+  async updateUser(dto: UpdateUsername): Promise<AuthResponce> {
+    const userUpdate = await this.userService.updateUser(dto);
+    const userData = {
+      username: userUpdate.user.username,
+      email: userUpdate.email,
+    };
+    const token = await this.tokenService.generateJWT(userData);
+    return {
+      username: userUpdate.user.username,
+      email: userUpdate.email,
+      phone: userUpdate.user.phone,
       token,
     };
   }
