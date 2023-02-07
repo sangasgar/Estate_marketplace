@@ -4,6 +4,7 @@ import { Users } from './models/user.model';
 import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
 import { CreateUserDTO, UpdateUsername } from './dto';
+import { Watchlist } from '../watchlist/models/watchlist.model';
 @Injectable()
 export class UserService {
   constructor(
@@ -27,26 +28,38 @@ export class UserService {
     });
     return dto;
   }
-  async updateUser(dto: UpdateUsername): Promise<UpdateUsername> {
+  async updateUser(email, dto: UpdateUsername): Promise<UpdateUsername> {
     if (dto.user.username) {
       this.userRepository.update(
         { username: dto.user.username },
-        { where: { email: dto.email } },
+        { where: { email } },
       );
     }
     if (dto.user.password) {
       dto.user.password = await this.hashPassword(dto.user.password);
       this.userRepository.update(
         { password: dto.user.password },
-        { where: { email: dto.email } },
+        { where: { email } },
       );
     }
     if (dto.user.phone) {
       this.userRepository.update(
         { phone: dto.user.phone },
-        { where: { email: dto.email } },
+        { where: { email } },
       );
     }
     return dto;
+  }
+  async publicUser(email: string) {
+    return this.userRepository.findOne({
+      where: { email },
+      attributes: {
+        exclude: ['password'],
+      },
+      include: {
+        model: Watchlist,
+        required: false,
+      },
+    });
   }
 }

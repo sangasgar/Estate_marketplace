@@ -1,10 +1,10 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { AppError } from 'src/common/constant/error';
-import { TokenService } from 'src/token/token.service';
-import { CreateUserDTO, UpdateUsername } from 'src/user/dto';
-import { UserService } from 'src/user/user.service';
+import { TokenService } from 'src/modules/token/token.service';
+import { CreateUserDTO, UpdateUsername } from 'src/modules/user/dto';
+import { UserService } from 'src/modules/user/user.service';
 import { LoginDTO } from './dto';
-import { AuthResponce } from './responce';
+import { AuthResponce, UpdateUserResponce } from './responce';
 import * as bcrypt from 'bcrypt';
 @Injectable()
 export class AuthService {
@@ -30,30 +30,18 @@ export class AuthService {
     const validateUser = await bcrypt.compare(dto.password, user.password);
     if (!validateUser)
       throw new BadRequestException(AppError.USER_WRONG_PASSWORD);
-    const userData = {
-      username: user.username,
-      email: user.email,
-    };
-    const token = await this.tokenService.generateJWT(userData);
-    return {
-      username: user.username,
-      email: user.email,
-      phone: user.phone,
-      token,
-    };
+    const userFind = JSON.parse(
+      JSON.stringify(await this.userService.publicUser(dto.email)),
+    );
+    const token = await this.tokenService.generateJWT(userFind);
+    return { ...userFind, token };
   }
-  async updateUser(dto: UpdateUsername): Promise<AuthResponce> {
-    const userUpdate = await this.userService.updateUser(dto);
-    const userData = {
-      username: userUpdate.user.username,
-      email: userUpdate.email,
-    };
-    const token = await this.tokenService.generateJWT(userData);
+  async updateUser(email, dto: UpdateUsername): Promise<UpdateUserResponce> {
+    const userUpdate = await this.userService.updateUser(email, dto);
     return {
       username: userUpdate.user.username,
-      email: userUpdate.email,
+      email,
       phone: userUpdate.user.phone,
-      token,
     };
   }
 }

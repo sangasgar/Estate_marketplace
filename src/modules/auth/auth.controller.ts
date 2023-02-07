@@ -1,5 +1,5 @@
-import { Body, Controller, Patch, Post, UseGuards } from '@nestjs/common';
-import { CreateUserDTO, UpdateUsername } from 'src/user/dto';
+import { Body, Controller, Patch, Post, Req, UseGuards } from '@nestjs/common';
+import { CreateUserDTO, UpdateUsername } from 'src/modules/user/dto';
 import { AuthService } from './auth.service';
 import { LoginDTO } from './dto';
 import { JwtAuthGuard } from './guards';
@@ -17,7 +17,8 @@ export class AuthController {
   }
   @UseGuards(JwtAuthGuard)
   @Patch('update-user')
-  updateUser(@Body() dto: UpdateUsername) {
-    return this.authService.updateUser(dto);
+  updateUser(@Body() dto: UpdateUsername, @Req() request) {
+    const user = request.user;
+    return this.authService.updateUser(user.email, dto);
   }
 }

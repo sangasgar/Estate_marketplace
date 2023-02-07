@@ -11,8 +11,6 @@ export class CreateUserDTO {
   phone: string;
 }
 export class UpdateUsername {
-  @IsEmail()
-  email: string;
   @IsObject()
   user: {
     username?: string;
