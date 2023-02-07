@@ -10,3 +10,11 @@ export class AuthResponce {
   @IsString()
   token: string;
 }
+export class UpdateUserResponce {
+  @IsString()
+  username: string;
+  @IsString()
+  email: string;
+  @IsString()
+  phone: string;
+}
