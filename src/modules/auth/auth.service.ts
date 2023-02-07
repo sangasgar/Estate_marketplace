@@ -13,26 +13,34 @@ export class AuthService {
     private readonly tokenService: TokenService,
   ) {}
   async registerUser(dto: CreateUserDTO): Promise<AuthResponce> {
-    const userExist = await this.userService.findUser(dto.email);
-    if (userExist) throw new BadRequestException(AppError.USER_EXIST);
-    await this.userService.userRegister(dto);
-    const token = await this.tokenService.generateJWT(dto.email);
-    const userFind = JSON.parse(
-      JSON.stringify(await this.userService.publicUser(dto.email)),
-    );
-    return { ...userFind, token };
+    try {
+      const userExist = await this.userService.findUser(dto.email);
+      if (userExist) throw new BadRequestException(AppError.USER_EXIST);
+      await this.userService.userRegister(dto);
+      const token = await this.tokenService.generateJWT(dto.email);
+      const userFind = JSON.parse(
+        JSON.stringify(await this.userService.publicUser(dto.email)),
+      );
+      return { ...userFind, token };
+    } catch (error) {
+      throw new Error(error);
+    }
   }
   async loginAuth(dto: LoginDTO): Promise<AuthResponce> {
-    const user = await this.userService.findUser(dto.email);
-    if (!user) throw new BadRequestException(AppError.USER_NOT_FOUND);
-    const validateUser = await bcrypt.compare(dto.password, user.password);
-    if (!validateUser)
-      throw new BadRequestException(AppError.USER_WRONG_PASSWORD);
-    const userFind = JSON.parse(
-      JSON.stringify(await this.userService.publicUser(dto.email)),
-    );
-    const token = await this.tokenService.generateJWT(userFind);
-    return { ...userFind, token };
+    try {
+      const user = await this.userService.findUser(dto.email);
+      if (!user) throw new BadRequestException(AppError.USER_NOT_FOUND);
+      const validateUser = await bcrypt.compare(dto.password, user.password);
+      if (!validateUser)
+        throw new BadRequestException(AppError.USER_WRONG_PASSWORD);
+      const userFind = JSON.parse(
+        JSON.stringify(await this.userService.publicUser(dto.email)),
+      );
+      const token = await this.tokenService.generateJWT(userFind);
+      return { ...userFind, token };
+    } catch (error) {
+      throw new Error(error);
+    }
   }
   async updateUser(email, dto: UpdateUsername): Promise<UpdateUserResponce> {
     const userUpdate = await this.userService.updateUser(email, dto);
