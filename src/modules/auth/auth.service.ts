@@ -15,14 +15,12 @@ export class AuthService {
   async registerUser(dto: CreateUserDTO): Promise<AuthResponce> {
     const userExist = await this.userService.findUser(dto.email);
     if (userExist) throw new BadRequestException(AppError.USER_EXIST);
-    const user = await this.userService.userRegister(dto);
+    await this.userService.userRegister(dto);
     const token = await this.tokenService.generateJWT(dto.email);
-    return {
-      username: user.username,
-      email: user.email,
-      phone: user.phone,
-      token,
-    };
+    const userFind = JSON.parse(
+      JSON.stringify(await this.userService.publicUser(dto.email)),
+    );
+    return { ...userFind, token };
   }
   async loginAuth(dto: LoginDTO): Promise<AuthResponce> {
     const user = await this.userService.findUser(dto.email);
