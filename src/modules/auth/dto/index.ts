@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString } from 'class-validator';
-import { IsArray } from 'sequelize-typescript';
 
 export class LoginDTO {
   @ApiProperty()

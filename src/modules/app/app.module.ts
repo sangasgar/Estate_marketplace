@@ -12,6 +12,12 @@ import { TokenModule } from '../token/token.module';
 import { JwtService } from '@nestjs/jwt';
 import { WatchlistModule } from '../watchlist/watchlist.module';
 import { Watchlist } from '../watchlist/models/watchlist.model';
+import { Role } from '../admin/role/model/role.model';
+import { RoleModule } from '../admin/role/role.module';
+import { CompanyModule } from '../admin/company/company.module';
+import { Person } from '../admin/person/model/person.model';
+import { Company } from '../admin/company/model/company.model';
+import { PersonModule } from '../admin/person/person.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -28,7 +34,7 @@ import { Watchlist } from '../watchlist/models/watchlist.model';
         database: configService.get('db_name'),
         synchronize: true,
         autoLoadModels: true,
-        models: [Users, Watchlist],
+        models: [Users, Watchlist, Role, Person, Company],
       }),
       inject: [ConfigService],
     }),
@@ -36,6 +42,9 @@ import { Watchlist } from '../watchlist/models/watchlist.model';
     AuthModule,
     TokenModule,
     WatchlistModule,
+    RoleModule,
+    CompanyModule,
+    PersonModule,
   ],
   controllers: [AppController],
   providers: [AppService],

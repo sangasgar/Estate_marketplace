@@ -15,4 +15,11 @@ export class TokenService {
       expiresIn: this.configService.get('expire_jwt'),
     });
   }
+  async getRefreshToken(user) {
+    const payload = { user };
+    return this.jwtService.sign(payload, {
+      secret: this.configService.get('refresh_token'),
+      expiresIn: this.configService.get('refresh_jwt'),
+    });
+  }
 }
