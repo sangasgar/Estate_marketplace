@@ -7,4 +7,6 @@ export default () => ({
   secret_jwt: process.env.SECRET,
   expire_jwt: process.env.EXPIREJWT,
   saltrounds: process.env.SALTROUNDS,
+  refresh_token: process.env.REFRESH_SECRET,
+  refresh_jwt: process.env.REFRESHJWT,
 });

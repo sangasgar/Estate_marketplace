@@ -4,7 +4,7 @@ import { TokenService } from 'src/modules/token/token.service';
 import { CreateUserDTO, UpdateUsername } from 'src/modules/user/dto';
 import { UserService } from 'src/modules/user/user.service';
 import { LoginDTO } from './dto';
-import { AuthResponce, UpdateUserResponce } from './responce';
+import { AuthResponce, RefreshResponce, UpdateUserResponce } from './responce';
 import * as bcrypt from 'bcrypt';
 @Injectable()
 export class AuthService {
@@ -37,7 +37,8 @@ export class AuthService {
         JSON.stringify(await this.userService.publicUser(dto.email)),
       );
       const token = await this.tokenService.generateJWT(userFind);
-      return { ...userFind, token };
+      const refresh_token = await this.tokenService.getRefreshToken(userFind);
+      return { ...userFind, token, refresh_token };
     } catch (error) {
       throw new Error(error);
     }
@@ -49,5 +50,12 @@ export class AuthService {
       email,
       phone: userUpdate.user.phone,
     };
+  }
+  async refreshToken(user): Promise<RefreshResponce> {
+    const userFind = await this.userService.findUser(user.email);
+    if (!userFind) throw new BadRequestException(AppError.USER_NOT_FOUND);
+    const token = await this.tokenService.generateJWT(userFind);
+    const refresh_token = await this.tokenService.getRefreshToken(userFind);
+    return { token, refresh_token };
   }
 }
