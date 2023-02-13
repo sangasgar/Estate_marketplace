@@ -36,7 +36,6 @@ export class UserService {
         username: dto.username,
         email: dto.email,
         password: dto.password,
-        phone: dto.phone,
       });
       return dto;
     } catch (error) {

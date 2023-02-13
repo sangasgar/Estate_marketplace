@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { AppError } from 'src/common/constant/error';
 import { Role } from './model/role.model';
-import { ErrorResponse, RoleResponse, RolesResponse } from './response';
+import { RoleResponse, RolesResponse } from './response';
 
 @Injectable()
 export class RoleService {
@@ -10,19 +9,21 @@ export class RoleService {
     @InjectModel(Role)
     private readonly roleRepository: typeof Role,
   ) {}
-  async create(dto): Promise<RoleResponse | ErrorResponse> {
+  async create(dto): Promise<RoleResponse> {
     try {
-      const roleExist = await this.roleRepository.findOne({
-        where: { name: dto.name },
-      });
-      if (roleExist) {
-        return { error: AppError.ROLE_EXIST };
-      }
       const role = await this.roleRepository.create({ name: dto.name });
       return { id: role.id, name: role.name };
     } catch (error) {
       throw new Error(error);
     }
+  }
+  async findRole(dto): Promise<RoleResponse> {
+    try {
+      const roleExist = await this.roleRepository.findOne({
+        where: { name: dto.name },
+      });
+      return { id: roleExist.id, name: roleExist.name };
+    } catch (error) {}
   }
   async findAllRole(): Promise<RolesResponse> {
     try {

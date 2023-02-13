@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
+import { IsBoolean, IsString } from 'class-validator';
 
-export class CreateCompanyResponse {
+export class CompanyResponse {
   @ApiProperty()
   @IsString()
   company_name: string;
@@ -18,8 +18,12 @@ export class CreateCompanyResponse {
   @IsString()
   company_address: string;
 }
-export class ErrorCompanyResponse {
+export class Companies {
   @ApiProperty()
-  @IsString()
-  error: string;
+  companies: CompanyResponse[];
+}
+export class StatusCompanyResponse {
+  @ApiProperty()
+  @IsBoolean()
+  status: boolean;
 }
