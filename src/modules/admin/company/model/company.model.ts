@@ -1,5 +1,5 @@
-import { Column, HasMany, Model, Table } from 'sequelize-typescript';
-import { Person } from '../../person/model/person.model';
+import { Column, ForeignKey, Model, Table } from 'sequelize-typescript';
+import { Users } from 'src/modules/user/models/user.model';
 @Table
 export class Company extends Model {
   @Column
@@ -12,9 +12,6 @@ export class Company extends Model {
   company_phone: string;
   @Column
   company_address: string;
-  @HasMany(() => Person, {
-    onDelete: 'SET NULL',
-    onUpdate: 'SET NULL',
-  })
-  person: Person[];
+  @ForeignKey(() => Users)
+  user_id: Users;
 }

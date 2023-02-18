@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard, JwtRefreshTokenGuard } from '../auth/guards';
+import { JwtAuthGuard } from '../auth/guards';
 import { WatchlistDTO } from './dto';
 import { CreateAssetResponse } from './response';
 import { WatchlistService } from './watchlist.service';

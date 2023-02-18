@@ -5,11 +5,15 @@ import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
 import { CreateUserDTO, UpdateUsername } from './dto';
 import { Watchlist } from '../watchlist/models/watchlist.model';
+import { PersonService } from '../admin/person/person.service';
+import { Role } from '../auth/guards/enums/role.enum';
+import { RoleModel } from '../admin/role/model/role.model';
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel(Users) private readonly userRepository: typeof Users,
     private readonly configService: ConfigService,
+    private readonly personService: PersonService,
   ) {}
   async hashPassword(password: string): Promise<string> {
     try {
@@ -32,10 +36,13 @@ export class UserService {
   async userRegister(dto: CreateUserDTO): Promise<CreateUserDTO> {
     try {
       dto.password = await this.hashPassword(dto.password);
-      this.userRepository.create({
-        username: dto.username,
+      const user = await this.userRepository.create({
         email: dto.email,
         password: dto.password,
+        role_id: Role.Authorized,
+      });
+      await this.personService.createPerson({
+        user_id: user.id,
       });
       return dto;
     } catch (error) {
@@ -44,22 +51,10 @@ export class UserService {
   }
   async updateUser(email, dto: UpdateUsername): Promise<UpdateUsername> {
     try {
-      if (dto.user.username) {
-        this.userRepository.update(
-          { username: dto.user.username },
-          { where: { email } },
-        );
-      }
       if (dto.user.password) {
         dto.user.password = await this.hashPassword(dto.user.password);
         this.userRepository.update(
           { password: dto.user.password },
-          { where: { email } },
-        );
-      }
-      if (dto.user.phone) {
-        this.userRepository.update(
-          { phone: dto.user.phone },
           { where: { email } },
         );
       }
@@ -72,6 +67,7 @@ export class UserService {
     try {
       return this.userRepository.findOne({
         where: { email },
+
         attributes: {
           exclude: ['password'],
         },

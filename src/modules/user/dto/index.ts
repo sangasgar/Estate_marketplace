@@ -4,9 +4,6 @@ import { IsObject, IsString } from 'class-validator';
 export class CreateUserDTO {
   @ApiProperty()
   @IsString()
-  username: string;
-  @ApiProperty()
-  @IsString()
   email: string;
   @ApiProperty()
   @IsString()

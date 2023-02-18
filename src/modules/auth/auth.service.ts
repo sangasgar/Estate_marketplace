@@ -1,9 +1,4 @@
-import {
-  BadRequestException,
-  HttpException,
-  HttpStatus,
-  Injectable,
-} from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { AppError } from 'src/common/constant/error';
 import { TokenService } from 'src/modules/token/token.service';
 import { CreateUserDTO, UpdateUsername } from 'src/modules/user/dto';
@@ -20,10 +15,11 @@ export class AuthService {
   async registerUser(dto: CreateUserDTO): Promise<AuthResponce> {
     try {
       await this.userService.userRegister(dto);
-      const token = await this.tokenService.generateJWT(dto.email);
       const userFind = JSON.parse(
         JSON.stringify(await this.userService.publicUser(dto.email)),
       );
+      console.log(JSON.parse(JSON.stringify(userFind)));
+      const token = await this.tokenService.generateJWT(userFind);
       const refresh_token = await this.tokenService.getRefreshToken(userFind);
       return { ...userFind, token, refresh_token };
     } catch (error) {
@@ -38,6 +34,7 @@ export class AuthService {
       const userFind = JSON.parse(
         JSON.stringify(await this.userService.publicUser(dto.email)),
       );
+      console.log(JSON.parse(JSON.stringify(userFind)));
       const token = await this.tokenService.generateJWT(userFind);
       const refresh_token = await this.tokenService.getRefreshToken(userFind);
       return { ...userFind, token, refresh_token };
@@ -48,7 +45,6 @@ export class AuthService {
   async updateUser(email, dto: UpdateUsername): Promise<UpdateUserResponce> {
     const userUpdate = await this.userService.updateUser(email, dto);
     return {
-      username: userUpdate.user.username,
       email,
       phone: userUpdate.user.phone,
     };

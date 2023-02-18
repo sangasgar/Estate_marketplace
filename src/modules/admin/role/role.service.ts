@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { Role } from './model/role.model';
+import { RoleModel } from './model/role.model';
 import { RoleResponse, RolesResponse } from './response';
 
 @Injectable()
 export class RoleService {
   constructor(
-    @InjectModel(Role)
-    private readonly roleRepository: typeof Role,
+    @InjectModel(RoleModel)
+    private readonly roleRepository: typeof RoleModel,
   ) {}
   async create(dto): Promise<RoleResponse> {
     try {

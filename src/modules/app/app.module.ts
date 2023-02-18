@@ -12,17 +12,21 @@ import { TokenModule } from '../token/token.module';
 import { JwtService } from '@nestjs/jwt';
 import { WatchlistModule } from '../watchlist/watchlist.module';
 import { Watchlist } from '../watchlist/models/watchlist.model';
-import { Role } from '../admin/role/model/role.model';
+import { RoleModel } from '../admin/role/model/role.model';
 import { RoleModule } from '../admin/role/role.module';
 import { CompanyModule } from '../admin/company/company.module';
 import { Person } from '../admin/person/model/person.model';
 import { Company } from '../admin/company/model/company.model';
 import { PersonModule } from '../admin/person/person.module';
+import { SeederModule } from 'nestjs-sequelize-seeder';
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       load: [configuration],
+    }),
+    SeederModule.forRoot({
+      runOnlyIfTableIsEmpty: true,
     }),
     SequelizeModule.forRootAsync({
       imports: [ConfigModule],
@@ -34,7 +38,7 @@ import { PersonModule } from '../admin/person/person.module';
         database: configService.get('db_name'),
         synchronize: true,
         autoLoadModels: true,
-        models: [Users, Watchlist, Role, Person, Company],
+        models: [Users, Watchlist, RoleModel, Person, Company],
       }),
       inject: [ConfigService],
     }),

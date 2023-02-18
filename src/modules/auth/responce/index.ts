@@ -4,9 +4,6 @@ import { IsString } from 'class-validator';
 class UserResponce {
   @ApiProperty()
   @IsString()
-  username: string;
-  @ApiProperty()
-  @IsString()
   email: string;
   @ApiProperty()
   @IsString()
@@ -32,9 +29,6 @@ export class RefreshResponce {
   refresh_token: string;
 }
 export class UpdateUserResponce {
-  @ApiProperty()
-  @IsString()
-  username: string;
   @ApiProperty()
   @IsString()
   email: string;

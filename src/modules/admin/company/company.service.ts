@@ -26,18 +26,10 @@ export class CompanyService {
   async createCompany(companyCreateDTO: CompanyDTO): Promise<CompanyResponse> {
     try {
       const company = await this.companyRepository.create({
-        company_name: companyCreateDTO.company_name,
-        id_number: companyCreateDTO.id_number,
-        page_id: companyCreateDTO.page_id,
-        company_phone: companyCreateDTO.company_phone,
-        company_address: companyCreateDTO.company_address,
+        ...companyCreateDTO,
       });
       return {
-        company_name: company.company_name,
-        id_number: company.id_number,
-        page_id: company.page_id,
-        company_phone: company.company_phone,
-        company_address: company.company_address,
+        ...company,
       };
     } catch (error) {
       throw new Error(error);
@@ -51,27 +43,19 @@ export class CompanyService {
       throw new Error(error);
     }
   }
-  async updateCompany(companyDto): Promise<CompanyDTO> {
+  async updateCompany(companyDto): Promise<CompanyResponse> {
     try {
       await this.companyRepository.update(
         {
-          company_name: companyDto.company.company_name,
-          id_number: companyDto.company.id_number,
-          page_id: companyDto.company.page_id,
-          company_phone: companyDto.company.company_phone,
-          company_address: companyDto.company.company_address,
+          ...companyDto.company,
         },
-        { where: { id: companyDto.id } },
+        { where: { user_id: companyDto.user_id } },
       );
       const findCompany = await this.companyRepository.findOne({
-        where: { id: companyDto.id },
+        where: { user_id: companyDto.user_id },
       });
       return {
-        company_name: findCompany.company_name,
-        id_number: findCompany.id_number,
-        page_id: findCompany.page_id,
-        company_phone: findCompany.company_phone,
-        company_address: findCompany.company_address,
+        ...findCompany,
       };
     } catch (error) {
       throw new Error(error);
