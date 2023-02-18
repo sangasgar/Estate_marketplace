@@ -18,7 +18,6 @@ export class AuthService {
       const userFind = JSON.parse(
         JSON.stringify(await this.userService.publicUser(dto.email)),
       );
-      console.log(JSON.parse(JSON.stringify(userFind)));
       const token = await this.tokenService.generateJWT(userFind);
       const refresh_token = await this.tokenService.getRefreshToken(userFind);
       return { ...userFind, token, refresh_token };
@@ -34,7 +33,6 @@ export class AuthService {
       const userFind = JSON.parse(
         JSON.stringify(await this.userService.publicUser(dto.email)),
       );
-      console.log(JSON.parse(JSON.stringify(userFind)));
       const token = await this.tokenService.generateJWT(userFind);
       const refresh_token = await this.tokenService.getRefreshToken(userFind);
       return { ...userFind, token, refresh_token };
