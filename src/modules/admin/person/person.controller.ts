@@ -20,14 +20,13 @@ export class PersonController {
     @Req() request,
   ): Promise<PersonUpdateResponse> {
     const { id } = request.user;
-    console.log(request.user);
     personDTO.user_id = id;
     return this.personService.updatePerson(personDTO);
   }
 
   @ApiTags('PersonApi')
   @ApiResponse({ status: 200, type: PersonDTO })
-  @HasRoles(Role.Authorized)
+  @HasRoles(Role.Authorized, Role.Admin)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('self')
   getPerson(@Req() request): Promise<PersonResponse> {
