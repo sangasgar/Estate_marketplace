@@ -10,11 +10,6 @@ export class RoleResponse {
   @IsString()
   name: string;
 }
-export class ErrorResponse {
-  @ApiProperty()
-  @IsString()
-  error: string;
-}
 
 export class RolesResponse {
   @ApiProperty()

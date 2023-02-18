@@ -3,14 +3,17 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
+  HttpStatus,
   Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { AppError } from 'src/common/constant/error';
 import { JwtAuthGuard } from '../../auth/guards';
 import { RoleDeleteDTO, RoleDTO, RoleUpdateDTO } from './dto';
-import { ErrorResponse, RoleResponse, RolesResponse } from './response';
+import { RoleResponse, RolesResponse } from './response';
 import { RoleService } from './role.service';
 
 @Controller('dashboard/role')
@@ -20,7 +23,10 @@ export class RoleController {
   @ApiResponse({ status: 201, type: RoleResponse })
   @UseGuards(JwtAuthGuard)
   @Post('add')
-  createRole(@Body() roleDto: RoleDTO): Promise<RoleResponse | ErrorResponse> {
+  async createRole(@Body() roleDto: RoleDTO): Promise<RoleResponse> {
+    const roleExist = await this.roleService.findRole(roleDto);
+    if (roleExist)
+      throw new HttpException(AppError.ROLE_EXIST, HttpStatus.FOUND);
     return this.roleService.create(roleDto);
   }
 

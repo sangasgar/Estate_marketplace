@@ -1,22 +1,18 @@
 import { Column, ForeignKey, HasOne, Model, Table } from 'sequelize-typescript';
 import { Users } from 'src/modules/user/models/user.model';
-import { Company } from '../../company/model/company.model';
 
 @Table
 export class Person extends Model {
   @Column
-  firstname: string;
+  first_name: string;
   @Column
-  lastname: string;
+  last_name: string;
+  @Column
+  middle_name: string;
   @Column
   phone: string;
   @Column
   person_address: string;
-  @ForeignKey(() => Company)
-  company_id: Company;
-  @HasOne(() => Users, {
-    onDelete: 'SET NULL',
-    onUpdate: 'SET NULL',
-  })
+  @ForeignKey(() => Users)
   user_id: Users;
 }

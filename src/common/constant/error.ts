@@ -4,4 +4,5 @@ export const AppError = {
   USER_WRONG_PASSWORD: 'Your password is wrong',
   ROLE_EXIST: 'This role already exist',
   COMPANY_EXIST: 'This company already exist',
+  COMPANY_NOT_FOUND: 'This company not found',
 };
