@@ -1,10 +1,4 @@
-import {
-  BelongsToMany,
-  Column,
-  ForeignKey,
-  Model,
-  Table,
-} from 'sequelize-typescript';
+import { BelongsToMany, Column, Model, Table } from 'sequelize-typescript';
 import { Users } from 'src/modules/user/models/user.model';
 @Table
 export class Company extends Model {
@@ -21,3 +15,5 @@ export class Company extends Model {
   @BelongsToMany(() => Users, 'Company_Users', 'company_id', 'user_id')
   users: Users[];
 }
+@Table
+export class Company_Users extends Model {}

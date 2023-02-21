@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, Query } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -16,7 +16,7 @@ import { RoleModel } from '../admin/role/model/role.model';
 import { RoleModule } from '../admin/role/role.module';
 import { CompanyModule } from '../admin/company/company.module';
 import { Person } from '../admin/person/model/person.model';
-import { Company } from '../admin/company/model/company.model';
+import { Company, Company_Users } from '../admin/company/model/company.model';
 import { PersonModule } from '../admin/person/person.module';
 import { SeederModule } from 'nestjs-sequelize-seeder';
 @Module({
@@ -38,7 +38,7 @@ import { SeederModule } from 'nestjs-sequelize-seeder';
         database: configService.get('db_name'),
         synchronize: true,
         autoLoadModels: true,
-        models: [Users, Watchlist, RoleModel, Person, Company],
+        models: [Users, Watchlist, RoleModel, Person, Company, Company_Users],
       }),
       inject: [ConfigService],
     }),

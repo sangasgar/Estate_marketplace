@@ -4,10 +4,6 @@ import { Users } from 'src/modules/user/models/user.model';
 
 export class CompanyResponse {
   @ApiProperty()
-  user_id: Users;
-  @ApiProperty()
-  company_id: Companies;
-  @ApiProperty()
   @IsString()
   company_name: string;
   @ApiProperty()

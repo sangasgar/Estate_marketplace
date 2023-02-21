@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Query } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { Sequelize } from 'sequelize-typescript';
 import { Users } from 'src/modules/user/models/user.model';
 import { CompanyCreateDTO, DeleteCompany, UpdateCompany } from './dto';
-import { Company } from './model/company.model';
+import { Company, Company_Users } from './model/company.model';
 import { Companies, CompanyResponse, StatusCompanyResponse } from './response';
 
 @Injectable()
@@ -12,12 +13,16 @@ export class CompanyService {
     private readonly companyRepository: typeof Company,
     @InjectModel(Users)
     private readonly userRepository: typeof Users,
+    @InjectModel(Company_Users)
+    private readonly companyUsersRepository: typeof Company_Users,
+    private sequelize: Sequelize,
   ) {}
   async findCompany(field): Promise<boolean> {
     try {
       const companyExist = await this.companyRepository.findOne({
         where: field,
       });
+
       if (companyExist) {
         return true;
       } else false;
@@ -30,29 +35,23 @@ export class CompanyService {
     companyCreateDTO: CompanyCreateDTO,
   ): Promise<CompanyResponse> {
     try {
-      console.log(companyCreateDTO);
-      const Company_Users = this.companyRepository.belongsToMany(Users, {
-        through: 'Company_Users',
-        foreignKey: 'company_id',
-        otherKey: 'user_id',
-        as: 'company_users',
-      });
-      console.log(Company_Users);
-      const company = await this.companyRepository.create(
+      const t = await this.sequelize.transaction();
+      const company = await Company.create(
         {
           ...companyCreateDTO.company,
-          company_users: {
-            user_id: companyCreateDTO.company.user_id,
-          },
         },
-        {
-          include: {
-            association: Company_Users,
-            as: 'company_users',
-          },
-        },
+        { transaction: t },
       );
-      return;
+      await this.companyUsersRepository.create(
+        {
+          user_id: companyCreateDTO.company.user_id,
+          company_id: company.id,
+        },
+        { transaction: t },
+      );
+      await t.commit();
+
+      return company;
     } catch (error) {
       throw new Error(error);
     }
