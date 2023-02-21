@@ -1,5 +1,6 @@
 import {
   BelongsTo,
+  BelongsToMany,
   Column,
   ForeignKey,
   HasMany,
@@ -20,11 +21,10 @@ export class Users extends Model {
   password: string;
   @ForeignKey(() => RoleModel)
   role_id: RoleModel;
-  @HasMany(() => Company, {
-    onDelete: 'SET NULL',
-    onUpdate: 'SET NULL',
-  })
-  company_id: Company;
+  @BelongsTo(() => RoleModel)
+  role: RoleModel;
+  @BelongsToMany(() => Company, 'Company_Users', 'user_id', 'company_id')
+  company: Company[];
   @HasOne(() => Person, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',

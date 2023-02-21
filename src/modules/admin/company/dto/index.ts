@@ -3,9 +3,8 @@ import { IsObject, IsString } from 'class-validator';
 
 export class CompanyDTO {
   @ApiProperty()
-  user_id?: number;
+  user_id: string;
   @ApiProperty()
-  @IsString()
   company_name: string;
   @ApiProperty()
   @IsString()
@@ -17,19 +16,33 @@ export class CompanyDTO {
   @ApiProperty()
   company_address?: string;
 }
-export class UpdateCompany {
+export class CompanyUpdateDTO {
   @ApiProperty()
-  user_id?: number;
+  user_id: string;
+  @ApiProperty()
+  id?: number;
+  @ApiProperty()
+  company_name: string;
+  @ApiProperty()
+  id_number: string;
+  @ApiProperty()
+  page_id?: number;
+  @ApiProperty()
+  company_phone?: string;
+  @ApiProperty()
+  company_address?: string;
+}
+
+export class CompanyCreateDTO {
   @ApiProperty()
   @IsObject()
-  company: {
-    id?: number;
-    company_name?: string;
-    id_number?: string;
-    page_id?: number;
-    company_phone?: string;
-    company_address?: string;
-  };
+  company: CompanyDTO;
+}
+
+export class UpdateCompany {
+  @ApiProperty()
+  @IsObject()
+  company: CompanyUpdateDTO;
 }
 export class DeleteCompany {
   @ApiProperty()

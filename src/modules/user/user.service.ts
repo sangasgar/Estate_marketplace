@@ -42,7 +42,7 @@ export class UserService {
         role_id: Role.Authorized,
       });
       await this.personService.createPerson({
-        user_id: user.id,
+        person: { user_id: user.id },
       });
       return dto;
     } catch (error) {
