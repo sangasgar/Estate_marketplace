@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { transliteration } from 'src/config/translit';
 import { PageDeleteDTO, PageDTO, UpdatePageDTO } from './dto';
 import { Page } from './model/page.model';
-import { PageResponse, PagesResponse, PageStatusResponse } from './response';
+import { PageResponse, PageStatusResponse } from './response';
 
 @Injectable()
 export class PageService {
@@ -31,22 +31,14 @@ export class PageService {
       const deletePage = await this.pageRepository.destroy({
         where: { ...id },
       });
-      if (deletePage === 1) {
-        return { status: true };
-      } else {
-        return { status: false };
-      }
+      if (deletePage === 1) return { status: true };
     } catch (error) {
       throw new Error(error);
     }
   }
-  async getPages(): Promise<PagesResponse> {
+  async getPages(): Promise<PageResponse[]> {
     const pages = await this.pageRepository.findAll();
-    return { pages };
-  }
-  async getPage(): Promise<PageResponse> {
-    const pages = await this.pageRepository.findOne();
-    return;
+    return pages;
   }
   async updatePage(updatePageDTO: UpdatePageDTO): Promise<PageResponse> {
     try {

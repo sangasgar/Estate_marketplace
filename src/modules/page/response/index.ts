@@ -24,8 +24,3 @@ export class PageStatusResponse {
   @IsBoolean()
   status: boolean;
 }
-export class PagesResponse {
-  @ApiProperty()
-  @IsObject()
-  pages: PageResponse[];
-}

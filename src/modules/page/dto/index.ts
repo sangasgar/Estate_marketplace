@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber, IsObject, IsString } from 'class-validator';
+import { DataTypes } from 'sequelize';
 
 export class PageDTO {
   @ApiProperty()

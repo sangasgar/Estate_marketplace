@@ -1,4 +1,4 @@
-import { Column, Model, Table } from 'sequelize-typescript';
+import { Column, DataType, Model, Table } from 'sequelize-typescript';
 
 @Table
 export class Page extends Model {
@@ -10,7 +10,7 @@ export class Page extends Model {
   slug: string;
   @Column
   short_page_description: string;
-  @Column
+  @Column({ type: DataType.TEXT })
   page_description_html: string;
   @Column
   page_keywords: string;

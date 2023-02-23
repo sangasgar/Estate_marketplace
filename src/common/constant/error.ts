@@ -7,4 +7,6 @@ export const AppError = {
   COMPANY_NOT_FOUND: 'This company not found',
   PAGE_EXIST: 'This page already exist',
   PAGE_NOT_FOUND: 'This page not found',
+  NENU_FOUND: 'Menu already exist',
+  NENU_NOT_FOUND: 'Menu not found',
 };

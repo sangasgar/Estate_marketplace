@@ -11,6 +11,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { isString } from 'class-validator';
 import { AppError } from 'src/common/constant/error';
 import { JwtAuthGuard } from 'src/modules/auth/guards';
 import { Role } from 'src/modules/auth/guards/enums/role.enum';
@@ -18,7 +19,7 @@ import { RolesGuard } from 'src/modules/auth/guards/role.guard';
 import { HasRoles } from 'src/modules/auth/guards/roles.decorator';
 import { PageDeleteDTO, PageDTO, UpdatePageDTO } from './dto';
 import { PageService } from './page.service';
-import { PageResponse, PagesResponse, PageStatusResponse } from './response';
+import { PageResponse, PageStatusResponse } from './response';
 
 @Controller('page')
 export class PageController {
@@ -62,20 +63,23 @@ export class PageController {
     });
   }
   @ApiTags('PageApi')
-  @ApiResponse({ status: 200, type: PagesResponse })
-  @HasRoles(Role.Manager, Role.Authorized, Role.Admin)
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @ApiResponse({ status: 200, type: PageResponse })
   @Get('all')
-  async getPages(): Promise<PagesResponse> {
+  async getPages(): Promise<PageResponse[]> {
     return this.pageService.getPages();
   }
 
   @ApiTags('PageApi')
-  @ApiResponse({ status: 200, type: PagesResponse })
-  @HasRoles(Role.Manager, Role.Authorized, Role.Admin)
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Get(':slug')
-  async getPage(@Param('slug') id: number) {
-    console.log(id);
+  @ApiResponse({ status: 200, type: PageResponse })
+  @Get(':slugOrId')
+  async getPage(@Param('slugOrId') slugOrId: any): Promise<PageResponse> {
+    let page = null;
+    if (isString(slugOrId))
+      page = await this.pageService.findPage({ slug: slugOrId });
+    if (Number(slugOrId))
+      page = await this.pageService.findPage({ id: slugOrId });
+    if (!page)
+      throw new HttpException(AppError.PAGE_NOT_FOUND, HttpStatus.NOT_FOUND);
+    return page;
   }
 }
