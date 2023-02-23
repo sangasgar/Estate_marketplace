@@ -1,13 +1,23 @@
-import { BelongsToMany, Column, Model, Table } from 'sequelize-typescript';
+import {
+  BelongsTo,
+  BelongsToMany,
+  Column,
+  ForeignKey,
+  Model,
+  Table,
+} from 'sequelize-typescript';
 import { Users } from 'src/modules/user/models/user.model';
+import { Page } from '../../page/model/page.model';
 @Table
 export class Company extends Model {
   @Column
   company_name: string;
   @Column
   id_number: string;
-  @Column
-  page_id: number;
+  @ForeignKey(() => Page)
+  page_id: Page;
+  @BelongsTo(() => Page)
+  page: Page;
   @Column
   company_phone: string;
   @Column

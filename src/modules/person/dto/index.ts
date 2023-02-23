@@ -1,8 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber, IsObject } from 'class-validator';
-class Person {
+export class PersonDTO {
   @ApiProperty()
-  @IsNumber()
   user_id: number;
   @ApiProperty()
   first_name?: string;
@@ -16,10 +15,9 @@ class Person {
   person_address?: string;
 }
 
-class PersonUpdate {
+export class PersonUpdateDTO {
   @ApiProperty()
-  @IsNumber()
-  user_id?: number;
+  user_id: number;
   @ApiProperty()
   first_name?: string;
   @ApiProperty()
@@ -30,15 +28,4 @@ class PersonUpdate {
   phone?: string;
   @ApiProperty()
   person_address?: string;
-}
-
-export class PersonDTO {
-  @ApiProperty()
-  @IsObject()
-  person?: Person;
-}
-export class PersonUpdateDTO {
-  @ApiProperty()
-  @IsObject()
-  person: PersonUpdate;
 }

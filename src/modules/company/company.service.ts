@@ -2,7 +2,7 @@ import { Injectable, Query } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Sequelize } from 'sequelize-typescript';
 import { Users } from 'src/modules/user/models/user.model';
-import { CompanyCreateDTO, DeleteCompany, UpdateCompany } from './dto';
+import { CompanyDTO, CompanyUpdateDTO, DeleteCompanyDTO } from './dto';
 import { Company, Company_Users } from './model/company.model';
 import { Companies, CompanyResponse, StatusCompanyResponse } from './response';
 
@@ -31,20 +31,18 @@ export class CompanyService {
     }
   }
 
-  async createCompany(
-    companyCreateDTO: CompanyCreateDTO,
-  ): Promise<CompanyResponse> {
+  async createCompany(companyCreateDTO: CompanyDTO): Promise<CompanyResponse> {
     try {
       const t = await this.sequelize.transaction();
       const company = await Company.create(
         {
-          ...companyCreateDTO.company,
+          ...companyCreateDTO,
         },
         { transaction: t },
       );
       await this.companyUsersRepository.create(
         {
-          user_id: companyCreateDTO.company.user_id,
+          user_id: companyCreateDTO.user_id,
           company_id: company.id,
         },
         { transaction: t },
@@ -60,28 +58,49 @@ export class CompanyService {
     try {
       const companiesFind = await this.companyRepository.findAll();
       console.log(companiesFind);
-      return;
+      return { companies: companiesFind };
     } catch (error) {
       throw new Error(error);
     }
   }
-  async updateCompany(companyDto: UpdateCompany): Promise<CompanyResponse> {
+  async updateCompany(companyDto: CompanyUpdateDTO): Promise<CompanyResponse> {
     try {
-      await this.companyRepository.update(
-        {
-          ...companyDto.company,
-        },
-        { where: { user_id: companyDto.company.user_id } },
-      );
-      const findCompany = await this.companyRepository.findOne({
-        where: { user_id: companyDto.company.user_id },
-      });
-      return;
+      let findCompany = null;
+      if (companyDto.id_number) {
+        await this.companyRepository.update(
+          {
+            ...companyDto,
+          },
+          {
+            where: { id_number: companyDto.id_number } || {
+              id: companyDto.id,
+            },
+          },
+        );
+        findCompany = await this.companyRepository.findOne({
+          where: { id_number: companyDto.id_number },
+        });
+      }
+      if (companyDto.id) {
+        await this.companyRepository.update(
+          {
+            ...companyDto,
+          },
+          {
+            where: { id: companyDto.id },
+          },
+        );
+        findCompany = await this.companyRepository.findOne({
+          where: { id: companyDto.id },
+        });
+      }
+
+      return findCompany;
     } catch (error) {
       throw new Error(error);
     }
   }
-  async deleteCompany(id: DeleteCompany): Promise<StatusCompanyResponse> {
+  async deleteCompany(id: DeleteCompanyDTO): Promise<StatusCompanyResponse> {
     const deleteCompany = await this.companyRepository.destroy({
       where: { ...id },
     });

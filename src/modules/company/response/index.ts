@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsBoolean, IsNumber, IsObject, IsString } from 'class-validator';
-import { Users } from 'src/modules/user/models/user.model';
+import { Page } from '../../page/model/page.model';
 
 export class CompanyResponse {
   @ApiProperty()
@@ -14,7 +14,7 @@ export class CompanyResponse {
   company_phone: string;
   @ApiProperty()
   @IsString()
-  page_id: number;
+  page_id: Page;
   @ApiProperty()
   @IsString()
   company_address: string;

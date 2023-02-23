@@ -5,9 +5,10 @@ import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
 import { CreateUserDTO, UpdateUsername } from './dto';
 import { Watchlist } from '../watchlist/models/watchlist.model';
-import { PersonService } from '../admin/person/person.service';
+import { PersonService } from '../person/person.service';
 import { Role } from '../auth/guards/enums/role.enum';
-import { RoleModel } from '../admin/role/model/role.model';
+import { RoleModel } from '../role/model/role.model';
+import { Company } from '../company/model/company.model';
 @Injectable()
 export class UserService {
   constructor(
@@ -42,7 +43,7 @@ export class UserService {
         role_id: Role.Authorized,
       });
       await this.personService.createPerson({
-        person: { user_id: user.id },
+        user_id: user.id,
       });
       return dto;
     } catch (error) {
@@ -71,10 +72,16 @@ export class UserService {
         attributes: {
           exclude: ['password'],
         },
-        include: {
-          model: Watchlist,
-          required: false,
-        },
+        include: [
+          {
+            model: Watchlist,
+            required: false,
+          },
+          {
+            model: Company,
+            required: false,
+          },
+        ],
       });
     } catch (error) {
       throw new Error(error);

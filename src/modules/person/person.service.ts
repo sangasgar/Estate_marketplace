@@ -22,9 +22,9 @@ export class PersonService {
   async createPerson(personDTO: PersonDTO): Promise<PersonResponse> {
     try {
       await this.personRepository.create({
-        user_id: personDTO.person.user_id,
+        user_id: personDTO.user_id,
       });
-      const person = await this.findPerson(personDTO.person.user_id);
+      const person = await this.findPerson(personDTO.user_id);
       return person;
     } catch (error) {
       throw new Error(error);
@@ -36,9 +36,9 @@ export class PersonService {
     try {
       const updatePerson = await this.personRepository.update(
         {
-          ...personDTO.person,
+          ...personDTO,
         },
-        { where: { user_id: personDTO.person.user_id } },
+        { where: { user_id: personDTO.user_id } },
       );
       if (updatePerson[0] === 1) {
         return { updateStatus: true };
