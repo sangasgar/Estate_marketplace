@@ -11,12 +11,12 @@ import {
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AppError } from 'src/common/constant/error';
-import { JwtAuthGuard } from '../../auth/guards';
+import { JwtAuthGuard } from '../auth/guards';
 import { RoleDeleteDTO, RoleDTO, RoleUpdateDTO } from './dto';
 import { RoleResponse, RolesResponse } from './response';
 import { RoleService } from './role.service';
 
-@Controller('dashboard/role')
+@Controller('role')
 export class RoleController {
   constructor(private readonly roleService: RoleService) {}
   @ApiTags('RolesAPI')
@@ -34,7 +34,7 @@ export class RoleController {
   @ApiResponse({ status: 200, type: RolesResponse })
   @UseGuards(JwtAuthGuard)
   @Get('all')
-  findRole() {
+  async findRole() {
     return this.roleService.findAllRole();
   }
 
@@ -42,13 +42,13 @@ export class RoleController {
   @ApiResponse({ status: 200, type: RoleUpdateDTO })
   @UseGuards(JwtAuthGuard)
   @Patch('update')
-  updateRole(@Body() roleDto: RoleUpdateDTO): Promise<boolean> {
+  async updateRole(@Body() roleDto: RoleUpdateDTO): Promise<boolean> {
     return this.roleService.updateRole(roleDto.id, roleDto.name);
   }
   @ApiTags('RolesAPI')
   @ApiResponse({ status: 200, type: RoleDeleteDTO })
   @Delete()
-  deleteRole(@Body() deleteRole: RoleDeleteDTO): Promise<boolean> {
+  async deleteRole(@Body() deleteRole: RoleDeleteDTO): Promise<boolean> {
     return this.roleService.deleteRole(deleteRole.id);
   }
 }

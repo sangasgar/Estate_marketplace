@@ -3,19 +3,19 @@ import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/modules/auth/guards';
 import { RolesGuard } from 'src/modules/auth/guards/role.guard';
 import { HasRoles } from 'src/modules/auth/guards/roles.decorator';
-import { Role } from '../../auth/guards/enums/role.enum';
+import { Role } from '../auth/guards/enums/role.enum';
 import { PersonDTO, PersonUpdateDTO } from './dto';
 import { PersonService } from './person.service';
 import { PersonResponse, PersonUpdateResponse } from './response';
 
-@Controller('dashboard/persons')
+@Controller('persons')
 export class PersonController {
   constructor(private readonly personService: PersonService) {}
   @ApiTags('PersonApi')
   @ApiResponse({ status: 200, type: PersonUpdateResponse })
   @UseGuards(JwtAuthGuard)
   @Patch('update')
-  updatePerson(
+  async updatePerson(
     @Body() personDTO: PersonUpdateDTO,
     @Req() request,
   ): Promise<PersonUpdateResponse> {
@@ -26,10 +26,10 @@ export class PersonController {
 
   @ApiTags('PersonApi')
   @ApiResponse({ status: 200, type: PersonDTO })
-  @HasRoles(Role.Authorized, Role.Admin)
+  @HasRoles(Role.Manager, Role.Authorized, Role.Admin)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('self')
-  getPerson(@Req() request): Promise<PersonResponse> {
+  async getPerson(@Req() request): Promise<PersonResponse> {
     const { id } = request.user;
     return this.personService.findPerson(id);
   }

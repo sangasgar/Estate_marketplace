@@ -14,10 +14,10 @@ import { AppError } from 'src/common/constant/error';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/modules/auth/guards';
 import { CompanyService } from './company.service';
-import { CompanyDTO, DeleteCompany, UpdateCompany } from './dto';
+import { CompanyDTO, CompanyUpdateDTO, DeleteCompanyDTO } from './dto';
 import { CompanyResponse, StatusCompanyResponse } from './response';
 
-@Controller('dashboard/company')
+@Controller('company')
 export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
   @ApiTags('CompanyApi')
@@ -49,29 +49,34 @@ export class CompanyController {
   @ApiResponse({ status: 200 })
   @UseGuards(JwtAuthGuard)
   @Patch('update')
-  async updateCompany(@Body() company: UpdateCompany, @Req() request) {
-    const user = request.user;
-    company.user_id = user.id;
-    const findCompany = await this.companyService.findCompany({
-      user_id: company.user_id,
-    });
-    company.user_id = user.id;
+  async updateCompany(@Body() updateCompany: CompanyUpdateDTO) {
+    let findCompany = null;
+    if (updateCompany.id_number) {
+      findCompany = await this.companyService.findCompany({
+        id_number: updateCompany.id_number,
+      });
+    }
+    if (!updateCompany.id_number && updateCompany.id) {
+      findCompany = await this.companyService.findCompany({
+        id: updateCompany.id,
+      });
+    }
     if (!findCompany)
       throw new HttpException(AppError.COMPANY_NOT_FOUND, HttpStatus.NOT_FOUND);
-    return this.companyService.updateCompany(company);
+    return this.companyService.updateCompany(updateCompany);
   }
   @ApiTags('CompanyApi')
   @ApiResponse({ status: 200 })
   @UseGuards(JwtAuthGuard)
   @Delete()
   async deleteCompany(
-    @Body() deleteCompany: DeleteCompany,
+    @Body() deleteCompany: DeleteCompanyDTO,
   ): Promise<StatusCompanyResponse> {
     const findCompany = await this.companyService.findCompany({
       ...deleteCompany,
     });
     if (!findCompany)
       throw new HttpException(AppError.COMPANY_NOT_FOUND, HttpStatus.NOT_FOUND);
-    return this.companyService.deleteCompany(deleteCompany);
+    return this.companyService.deleteCompany({ ...deleteCompany });
   }
 }

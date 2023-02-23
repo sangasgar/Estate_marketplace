@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, Query } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -12,13 +12,15 @@ import { TokenModule } from '../token/token.module';
 import { JwtService } from '@nestjs/jwt';
 import { WatchlistModule } from '../watchlist/watchlist.module';
 import { Watchlist } from '../watchlist/models/watchlist.model';
-import { RoleModel } from '../admin/role/model/role.model';
-import { RoleModule } from '../admin/role/role.module';
-import { CompanyModule } from '../admin/company/company.module';
-import { Person } from '../admin/person/model/person.model';
-import { Company } from '../admin/company/model/company.model';
-import { PersonModule } from '../admin/person/person.module';
+import { RoleModel } from '../role/model/role.model';
+import { RoleModule } from '../role/role.module';
+import { CompanyModule } from '../company/company.module';
+import { Person } from '../person/model/person.model';
+import { Company, Company_Users } from '../company/model/company.model';
+import { PersonModule } from '../person/person.module';
 import { SeederModule } from 'nestjs-sequelize-seeder';
+import { PageModule } from '../page/page.module';
+import { Page } from '../page/model/page.model';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -38,7 +40,15 @@ import { SeederModule } from 'nestjs-sequelize-seeder';
         database: configService.get('db_name'),
         synchronize: true,
         autoLoadModels: true,
-        models: [Users, Watchlist, RoleModel, Person, Company],
+        models: [
+          Users,
+          Watchlist,
+          RoleModel,
+          Person,
+          Company,
+          Company_Users,
+          Page,
+        ],
       }),
       inject: [ConfigService],
     }),
@@ -49,6 +59,7 @@ import { SeederModule } from 'nestjs-sequelize-seeder';
     RoleModule,
     CompanyModule,
     PersonModule,
+    PageModule,
   ],
   controllers: [AppController],
   providers: [AppService],

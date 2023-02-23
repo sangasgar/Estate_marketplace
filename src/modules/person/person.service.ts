@@ -36,7 +36,7 @@ export class PersonService {
     try {
       const updatePerson = await this.personRepository.update(
         {
-          ...personDTO.person,
+          ...personDTO,
         },
         { where: { user_id: personDTO.user_id } },
       );

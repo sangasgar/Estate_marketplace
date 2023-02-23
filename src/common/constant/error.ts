@@ -5,4 +5,6 @@ export const AppError = {
   ROLE_EXIST: 'This role already exist',
   COMPANY_EXIST: 'This company already exist',
   COMPANY_NOT_FOUND: 'This company not found',
+  PAGE_EXIST: 'This page already exist',
+  PAGE_NOT_FOUND: 'This page not found',
 };
