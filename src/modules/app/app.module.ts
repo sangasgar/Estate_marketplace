@@ -21,6 +21,8 @@ import { PersonModule } from '../person/person.module';
 import { SeederModule } from 'nestjs-sequelize-seeder';
 import { PageModule } from '../page/page.module';
 import { Page } from '../page/model/page.model';
+import { MenuModule } from '../menu/menu.module';
+import { Menu } from '../menu/model/menu.model';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -48,6 +50,7 @@ import { Page } from '../page/model/page.model';
           Company,
           Company_Users,
           Page,
+          Menu,
         ],
       }),
       inject: [ConfigService],
@@ -60,6 +63,7 @@ import { Page } from '../page/model/page.model';
     CompanyModule,
     PersonModule,
     PageModule,
+    MenuModule,
   ],
   controllers: [AppController],
   providers: [AppService],

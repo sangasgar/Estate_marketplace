@@ -152,5 +152,5 @@ export const transliteration = (str) => {
   }
   // Удаляем повторяющие знаки - Именно на них заменяются пробелы.
   // Так же удаляем символы перевода строки, но это наверное уже лишнее
-  return '/' + newStr.replace(/[-]{2,}/gim, '-').replace(/\n/gim, '');
+  return newStr.replace(/[-]{2,}/gim, '-').replace(/\n/gim, '');
 };
