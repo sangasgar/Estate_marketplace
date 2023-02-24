@@ -23,6 +23,10 @@ import { PageModule } from '../page/page.module';
 import { Page } from '../page/model/page.model';
 import { MenuModule } from '../menu/menu.module';
 import { Menu } from '../menu/model/menu.model';
+import { Category } from '../category/model/category.model';
+import { CategoryModule } from '../category/category.module';
+import { SearchHistoryModule } from '../search_history/search_history.module';
+import { Search_History } from '../search_history/model/search_history.model';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -51,6 +55,8 @@ import { Menu } from '../menu/model/menu.model';
           Company_Users,
           Page,
           Menu,
+          Category,
+          Search_History,
         ],
       }),
       inject: [ConfigService],
@@ -64,6 +70,8 @@ import { Menu } from '../menu/model/menu.model';
     PersonModule,
     PageModule,
     MenuModule,
+    CategoryModule,
+    SearchHistoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],

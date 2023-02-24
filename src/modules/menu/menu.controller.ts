@@ -23,7 +23,7 @@ import { MenuResponse, MenuStatusResponse } from './response';
 export class MenuController {
   constructor(private readonly menuService: MenuService) {}
   @ApiTags('MenuApi')
-  @ApiResponse({ status: 200 })
+  @ApiResponse({ status: 200, type: MenuResponse })
   @HasRoles(Role.Admin, Role.Authorized, Role.Manager)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Post('add')
@@ -31,7 +31,7 @@ export class MenuController {
     const menu = await this.menuService.findMenu({
       menu_name: menuDTO.menu_name,
     });
-    if (menu) throw new HttpException(AppError.NENU_FOUND, HttpStatus.FOUND);
+    if (menu) throw new HttpException(AppError.MENU_FOUND, HttpStatus.FOUND);
     return this.menuService.createMenu(menuDTO);
   }
   @ApiTags('MenuApi')
@@ -44,7 +44,7 @@ export class MenuController {
       id: menuUpdate.id,
     });
     if (!menu)
-      throw new HttpException(AppError.NENU_NOT_FOUND, HttpStatus.NOT_FOUND);
+      throw new HttpException(AppError.MENU_NOT_FOUND, HttpStatus.NOT_FOUND);
     return this.menuService.updateMenu(menuUpdate);
   }
 
@@ -56,7 +56,7 @@ export class MenuController {
   }
 
   @ApiTags('MenuApi')
-  @ApiResponse({ status: 200 })
+  @ApiResponse({ status: 200, type: MenuStatusResponse })
   @HasRoles(Role.Admin, Role.Authorized, Role.Manager)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Delete()
@@ -67,7 +67,7 @@ export class MenuController {
       id: deleteMenu.id,
     });
     if (!menu)
-      throw new HttpException(AppError.NENU_NOT_FOUND, HttpStatus.NOT_FOUND);
+      throw new HttpException(AppError.MENU_NOT_FOUND, HttpStatus.NOT_FOUND);
     return this.menuService.deleteMenu(deleteMenu);
   }
 }
