@@ -5,6 +5,7 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
+import { Product } from 'src/modules/product/model/product.model';
 
 @Table
 export class Category extends Model {
@@ -18,4 +19,6 @@ export class Category extends Model {
   category_image: string;
   @Column
   slug: string;
+  @HasMany(() => Product)
+  product: Product[];
 }

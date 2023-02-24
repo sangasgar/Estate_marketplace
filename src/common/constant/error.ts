@@ -13,4 +13,6 @@ export const AppError = {
   CATEGORY_NOT_FOUND: 'Category not found',
   SEARCH_HISTORY_FOUND: 'Search history already exist',
   SEARCH_HISTORY_NOT_FOUND: 'Search history not found',
+  PRODUCT_FOUND: 'Product already exist',
+  PRODUCT_NOT_FOUND: 'Product not found',
 };
