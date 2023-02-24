@@ -4,11 +4,11 @@ import { Users } from './models/user.model';
 import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
 import { CreateUserDTO, UpdateUsername } from './dto';
-import { Watchlist } from '../watchlist/models/watchlist.model';
 import { PersonService } from '../person/person.service';
 import { Role } from '../auth/guards/enums/role.enum';
 import { RoleModel } from '../role/model/role.model';
 import { Company } from '../company/model/company.model';
+import { Wishlist } from '../wishlist/model/wishlist.model';
 @Injectable()
 export class UserService {
   constructor(
@@ -74,7 +74,7 @@ export class UserService {
         },
         include: [
           {
-            model: Watchlist,
+            model: Wishlist,
             required: false,
           },
           {

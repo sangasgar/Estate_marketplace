@@ -7,11 +7,8 @@ import configuration from '../../config/configuration';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Users } from '../user/models/user.model';
 import { AuthModule } from '../auth/auth.module';
-import { TokenService } from '../token/token.service';
 import { TokenModule } from '../token/token.module';
-import { JwtService } from '@nestjs/jwt';
-import { WatchlistModule } from '../watchlist/watchlist.module';
-import { Watchlist } from '../watchlist/models/watchlist.model';
+import { WishlistModule } from '../wishlist/wishlist.module';
 import { RoleModel } from '../role/model/role.model';
 import { RoleModule } from '../role/role.module';
 import { CompanyModule } from '../company/company.module';
@@ -27,6 +24,15 @@ import { Category } from '../category/model/category.model';
 import { CategoryModule } from '../category/category.module';
 import { SearchHistoryModule } from '../search_history/search_history.module';
 import { Search_History } from '../search_history/model/search_history.model';
+import { ProductModule } from '../product/product.module';
+import {
+  Product,
+  Products_Media_Types,
+  Products_Wishlists,
+} from '../product/model/product.model';
+import { MediaTypeModule } from 'src/modules/media_type/media_type.module';
+import { Media_type } from '../media_type/model/media_type.model';
+import { Wishlist } from '../wishlist/model/wishlist.model';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -48,7 +54,7 @@ import { Search_History } from '../search_history/model/search_history.model';
         autoLoadModels: true,
         models: [
           Users,
-          Watchlist,
+          Wishlist,
           RoleModel,
           Person,
           Company,
@@ -57,6 +63,10 @@ import { Search_History } from '../search_history/model/search_history.model';
           Menu,
           Category,
           Search_History,
+          Product,
+          Media_type,
+          Products_Media_Types,
+          Products_Wishlists,
         ],
       }),
       inject: [ConfigService],
@@ -64,7 +74,7 @@ import { Search_History } from '../search_history/model/search_history.model';
     UserModule,
     AuthModule,
     TokenModule,
-    WatchlistModule,
+    WishlistModule,
     RoleModule,
     CompanyModule,
     PersonModule,
@@ -72,6 +82,8 @@ import { Search_History } from '../search_history/model/search_history.model';
     MenuModule,
     CategoryModule,
     SearchHistoryModule,
+    ProductModule,
+    MediaTypeModule,
   ],
   controllers: [AppController],
   providers: [AppService],
