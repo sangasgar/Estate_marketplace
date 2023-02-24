@@ -7,6 +7,10 @@ export const AppError = {
   COMPANY_NOT_FOUND: 'This company not found',
   PAGE_EXIST: 'This page already exist',
   PAGE_NOT_FOUND: 'This page not found',
-  NENU_FOUND: 'Menu already exist',
-  NENU_NOT_FOUND: 'Menu not found',
+  MENU_FOUND: 'Menu already exist',
+  MENU_NOT_FOUND: 'Menu not found',
+  CATEGORY_FOUND: 'Category already exist',
+  CATEGORY_NOT_FOUND: 'Category not found',
+  SEARCH_HISTORY_FOUND: 'Search history already exist',
+  SEARCH_HISTORY_NOT_FOUND: 'Search history not found',
 };
