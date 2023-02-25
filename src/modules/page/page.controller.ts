@@ -1,5 +1,7 @@
 import {
   Body,
+  CacheInterceptor,
+  CacheTTL,
   Controller,
   Delete,
   Get,
@@ -9,6 +11,7 @@ import {
   Patch,
   Post,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { isString } from 'class-validator';
@@ -71,6 +74,8 @@ export class PageController {
 
   @ApiTags('PageApi')
   @ApiResponse({ status: 200, type: PageResponse })
+  @UseInterceptors(CacheInterceptor)
+  @CacheTTL(30) // override TTL to 30 seconds
   @Get(':slugOrId')
   async getPage(@Param('slugOrId') slugOrId: any): Promise<PageResponse> {
     let page = null;

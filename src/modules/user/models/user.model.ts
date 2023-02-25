@@ -20,6 +20,8 @@ export class Users extends Model {
   @Column
   email: string;
   @Column
+  email_is_verified: boolean;
+  @Column
   password: string;
   @ForeignKey(() => RoleModel)
   role_id: RoleModel;
@@ -45,4 +47,7 @@ export class Users extends Model {
   wishlist: Wishlist[];
   @HasMany(() => Product, 'user_id')
   product: Product[];
+
+  @BelongsToMany(() => Product, 'Viewed', 'user_id', 'product_id')
+  product_viewed: Product[];
 }
