@@ -1,4 +1,4 @@
-import { Module, Query } from '@nestjs/common';
+import { CacheModule, Module, Query } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -29,12 +29,27 @@ import {
   Product,
   Products_Media_Types,
   Products_Wishlists,
+  Product_Tags,
+  Viewed,
 } from '../product/model/product.model';
 import { MediaTypeModule } from 'src/modules/media_type/media_type.module';
 import { Media_type } from '../media_type/model/media_type.model';
 import { Wishlist } from '../wishlist/model/wishlist.model';
+import { TagsModule } from '../tags/tags.module';
+import { Tags } from '../tags/model/tags.model';
+import { ProductTypeModule } from '../product_type/product_type.module';
+import { PropertyNameModule } from '../property_name/property_name.module';
+import { PropertyValueModule } from '../property_value/property_value.module';
+import { Product_Type } from '../product_type/model/product_type.model';
+import { Property_Name } from '../property_name/model/property_name.model';
+import { Property_Value } from '../property_value/model/property_value.model';
+import { Lead_Status } from '../lead_status/model/lead_status.model';
+import { Leads, Lead_Type } from '../lead/model/lead.model';
+import { LeadStatusModule } from '../lead_status/lead_status.module';
+import { LeadsModule } from '../lead/leads.module';
 @Module({
   imports: [
+    CacheModule.register({ isGlobal: true }),
     ConfigModule.forRoot({
       isGlobal: true,
       load: [configuration],
@@ -67,6 +82,15 @@ import { Wishlist } from '../wishlist/model/wishlist.model';
           Media_type,
           Products_Media_Types,
           Products_Wishlists,
+          Viewed,
+          Tags,
+          Product_Tags,
+          Product_Type,
+          Property_Name,
+          Property_Value,
+          Lead_Status,
+          Lead_Type,
+          Leads,
         ],
       }),
       inject: [ConfigService],
@@ -84,6 +108,12 @@ import { Wishlist } from '../wishlist/model/wishlist.model';
     SearchHistoryModule,
     ProductModule,
     MediaTypeModule,
+    TagsModule,
+    ProductTypeModule,
+    PropertyNameModule,
+    PropertyValueModule,
+    LeadStatusModule,
+    LeadsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
