@@ -67,6 +67,8 @@ export class PageController {
   }
   @ApiTags('PageApi')
   @ApiResponse({ status: 200, type: PageResponse })
+  @UseInterceptors(CacheInterceptor)
+  @CacheTTL(30)
   @Get('all')
   async getPages(): Promise<PageResponse[]> {
     return this.pageService.getPages();
@@ -75,7 +77,7 @@ export class PageController {
   @ApiTags('PageApi')
   @ApiResponse({ status: 200, type: PageResponse })
   @UseInterceptors(CacheInterceptor)
-  @CacheTTL(30) // override TTL to 30 seconds
+  @CacheTTL(30)
   @Get(':slugOrId')
   async getPage(@Param('slugOrId') slugOrId: any): Promise<PageResponse> {
     let page = null;

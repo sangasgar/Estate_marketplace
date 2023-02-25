@@ -5,7 +5,6 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import { Page } from 'src/modules/page/model/page.model';
 
 @Table
 export class Menu extends Model {
@@ -22,5 +21,5 @@ export class Menu extends Model {
   @Column
   menu_image: string;
   @Column
-  page_slug: string;
+  menu_slug: string;
 }

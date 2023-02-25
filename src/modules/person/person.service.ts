@@ -33,6 +33,15 @@ export class PersonService {
   async updatePerson(
     personDTO: PersonUpdateDTO,
   ): Promise<PersonUpdateResponse> {
+    personDTO.first_name =
+      personDTO.first_name[0].toUpperCase() +
+      personDTO.first_name.substring(1).toLowerCase();
+    personDTO.last_name =
+      personDTO.last_name[0].toUpperCase() +
+      personDTO.last_name.substring(1).toLowerCase();
+    personDTO.middle_name =
+      personDTO.middle_name[0].toUpperCase() +
+      personDTO.middle_name.substring(1).toLowerCase();
     try {
       const updatePerson = await this.personRepository.update(
         {

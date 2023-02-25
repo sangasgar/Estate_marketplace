@@ -32,6 +32,8 @@ export class SearchHistoryController {
     @Req() request,
   ): Promise<SearchHistoryResponse> {
     const user = request.user;
+    searchHistoryDTO.search_history_text =
+      searchHistoryDTO.search_history_text.toLowerCase();
     const findSearchHistory = await this.searchHistoryService.findSearchHistory(
       searchHistoryDTO,
     );
