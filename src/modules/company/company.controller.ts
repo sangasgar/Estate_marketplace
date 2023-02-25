@@ -30,6 +30,8 @@ export class CompanyController {
   ): Promise<CompanyResponse> {
     const user = request.user;
     companyCreateDTO.user_id = user.id;
+    companyCreateDTO.company_name[0].toUpperCase() +
+      companyCreateDTO.company_name.substring(1).toLowerCase();
     const findCompany = await this.companyService.findCompany({
       id_number: companyCreateDTO.id_number,
     });

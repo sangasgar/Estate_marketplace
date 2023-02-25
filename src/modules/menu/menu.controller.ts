@@ -1,5 +1,7 @@
 import {
   Body,
+  CacheInterceptor,
+  CacheTTL,
   Controller,
   Delete,
   Get,
@@ -8,6 +10,7 @@ import {
   Patch,
   Post,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AppError } from 'src/common/constant/error';
@@ -28,6 +31,8 @@ export class MenuController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Post('add')
   async createMenu(@Body() menuDTO: MenuDTO): Promise<MenuResponse> {
+    menuDTO.menu_name[0].toUpperCase() +
+      menuDTO.menu_name.substring(1).toLowerCase();
     const menu = await this.menuService.findMenu({
       menu_name: menuDTO.menu_name,
     });
@@ -50,6 +55,8 @@ export class MenuController {
 
   @ApiTags('MenuApi')
   @ApiResponse({ status: 200, type: MenuResponse })
+  @UseInterceptors(CacheInterceptor)
+  @CacheTTL(30)
   @Get('all')
   async getAllMenu(): Promise<MenuResponse[]> {
     return this.menuService.getAllMenu();

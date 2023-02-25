@@ -15,4 +15,8 @@ export const AppError = {
   SEARCH_HISTORY_NOT_FOUND: 'Search history not found',
   PRODUCT_FOUND: 'Product already exist',
   PRODUCT_NOT_FOUND: 'Product not found',
+  TAG_FOUND: 'Tag already exist',
+  TAG_NOT_FOUND: 'Tag not found',
+  PRODUCT_TYPE_FOUND: 'Product type exist',
+  PRODUCT_TYPE_NOT_FOUND: 'Product type not found',
 };

@@ -24,6 +24,7 @@ export class RoleController {
   @UseGuards(JwtAuthGuard)
   @Post('add')
   async createRole(@Body() roleDto: RoleDTO): Promise<RoleResponse> {
+    roleDto.name[0].toUpperCase() + roleDto.name.substring(1).toLowerCase();
     const roleExist = await this.roleService.findRole(roleDto);
     if (roleExist)
       throw new HttpException(AppError.ROLE_EXIST, HttpStatus.FOUND);

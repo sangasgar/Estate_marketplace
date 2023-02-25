@@ -32,7 +32,6 @@ export class SearchHistoryService {
     searchHistoryDTO: SearchHistoryDTO,
   ): Promise<SearchHistoryResponse> {
     try {
-      console.log(searchHistoryDTO);
       const searchHistory = await this.searchHistoryRepository.create({
         ...searchHistoryDTO,
       });

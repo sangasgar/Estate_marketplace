@@ -30,6 +30,8 @@ export class CategoryController {
   async createCategory(
     @Body() categoryDTO: CategoryDTO,
   ): Promise<CategoryResponse> {
+    categoryDTO.category_name[0].toUpperCase() +
+      categoryDTO.category_name.substring(1).toLowerCase();
     const category = await this.categoryService.findCategory({
       category_name: categoryDTO.category_name,
     });

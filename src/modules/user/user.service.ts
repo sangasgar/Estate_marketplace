@@ -36,6 +36,7 @@ export class UserService {
   }
   async userRegister(dto: CreateUserDTO): Promise<CreateUserDTO> {
     try {
+      dto.email[0].toUpperCase() + dto.email.substring(1).toLowerCase();
       dto.password = await this.hashPassword(dto.password);
       const user = await this.userRepository.create({
         email: dto.email,

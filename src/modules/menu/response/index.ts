@@ -13,7 +13,7 @@ export class MenuResponse {
   menu_image: string;
   @ApiProperty()
   @IsString()
-  page_slug: string;
+  menu_slug: string;
 }
 export class MenuStatusResponse {
   @ApiProperty()
