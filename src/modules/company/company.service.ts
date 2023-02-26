@@ -54,11 +54,10 @@ export class CompanyService {
       throw new Error(error);
     }
   }
-  async getCompanies(): Promise<Companies> {
+  async getCompanies(): Promise<CompanyResponse[]> {
     try {
       const companiesFind = await this.companyRepository.findAll();
-      console.log(companiesFind);
-      return { companies: companiesFind };
+      return companiesFind;
     } catch (error) {
       throw new Error(error);
     }

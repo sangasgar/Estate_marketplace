@@ -1,4 +1,14 @@
-import { Body, Controller, Get, Patch, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  CacheInterceptor,
+  CacheTTL,
+  Controller,
+  Get,
+  Patch,
+  Req,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/modules/auth/guards';
 import { RolesGuard } from 'src/modules/auth/guards/role.guard';
@@ -13,6 +23,7 @@ export class PersonController {
   constructor(private readonly personService: PersonService) {}
   @ApiTags('PersonApi')
   @ApiResponse({ status: 200, type: PersonUpdateResponse })
+  @HasRoles(Role.Manager, Role.Authorized, Role.Admin)
   @UseGuards(JwtAuthGuard)
   @Patch('update')
   async updatePerson(
@@ -27,6 +38,8 @@ export class PersonController {
   @ApiTags('PersonApi')
   @ApiResponse({ status: 200, type: PersonDTO })
   @HasRoles(Role.Manager, Role.Authorized, Role.Admin)
+  @UseInterceptors(CacheInterceptor)
+  @CacheTTL(30)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('self')
   async getPerson(@Req() request): Promise<PersonResponse> {

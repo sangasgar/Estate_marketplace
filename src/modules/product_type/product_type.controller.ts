@@ -8,6 +8,9 @@ import {
   Patch,
   Post,
   UseGuards,
+  UseInterceptors,
+  CacheInterceptor,
+  CacheTTL,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AppError } from 'src/common/constant/error';
@@ -28,7 +31,7 @@ export class ProductTypeController {
   constructor(private readonly productTypeService: ProductTypeService) {}
   @ApiTags('ProductTypeAPI')
   @ApiResponse({ status: 200, type: Product_TypeResponse })
-  @HasRoles(Role.Manager, Role.Authorized, Role.Admin)
+  @HasRoles(Role.Manager, Role.Admin)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Post('add')
   async createProductType(
@@ -46,7 +49,7 @@ export class ProductTypeController {
   }
   @ApiTags('ProductTypeAPI')
   @ApiResponse({ status: 200, type: Product_TypeResponse })
-  @HasRoles(Role.Manager, Role.Authorized, Role.Admin)
+  @HasRoles(Role.Manager, Role.Admin)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Patch('update')
   async updateProductType(
@@ -64,7 +67,7 @@ export class ProductTypeController {
   }
   @ApiTags('ProductTypeAPI')
   @ApiResponse({ status: 200, type: Product_Type_Update_Response })
-  @HasRoles(Role.Manager, Role.Authorized, Role.Admin)
+  @HasRoles(Role.Manager, Role.Admin)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Delete()
   async deleteProductType(
@@ -81,6 +84,8 @@ export class ProductTypeController {
   }
   @ApiTags('ProductTypeAPI')
   @ApiResponse({ status: 200, type: Product_TypeResponse })
+  @UseInterceptors(CacheInterceptor)
+  @CacheTTL(30)
   @Get('all')
   async getroductTypes(): Promise<Product_TypeResponse[]> {
     return this.productTypeService.getroductTypes();
