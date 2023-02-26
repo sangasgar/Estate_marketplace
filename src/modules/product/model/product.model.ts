@@ -29,9 +29,9 @@ export class Product extends Model {
   @Column
   product_description: string;
   @Column
-  product_is_visible: boolean;
-  @Column
   product_sku_developer: string;
+  @Column
+  product_is_visible: boolean;
   @Column({ type: DataType.DOUBLE })
   product_price: number;
   @Column({ type: DataType.DOUBLE })
@@ -73,10 +73,6 @@ export class Product extends Model {
   product_type_id: Product_Type;
   @BelongsTo(() => Product_Type, 'product_type_id')
   product_type: Product_Type;
-  @ForeignKey(() => Company)
-  company_id: Company;
-  @BelongsTo(() => Company, 'company_id')
-  company: Company;
   @BelongsToMany(
     () => Wishlist,
     'Products_Wishlists',
