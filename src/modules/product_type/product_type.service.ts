@@ -22,10 +22,8 @@ export class ProductTypeService {
     });
     return product_type;
   }
-  async getroductTypes(): Promise<Product_TypeResponse[]> {
-    const product_type = await this.productTypeRepository.findAll({
-      include: Property_Name,
-    });
+  async getproductTypes(): Promise<Product_TypeResponse[]> {
+    const product_type = await this.productTypeRepository.findAll();
     return product_type;
   }
   async createProductType(

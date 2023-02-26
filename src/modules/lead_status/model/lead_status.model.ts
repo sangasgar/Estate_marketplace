@@ -4,7 +4,7 @@ import { Leads } from 'src/modules/lead/model/lead.model';
 @Table
 export class Lead_Status extends Model {
   @Column
-  lead_status: string;
+  lead_status_name: string;
   @HasMany(() => Leads, {
     onDelete: 'SET NULL',
     onUpdate: 'SET NULL',

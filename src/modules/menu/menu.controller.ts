@@ -29,7 +29,7 @@ export class MenuController {
   @ApiResponse({ status: 200, type: MenuResponse })
   @HasRoles(Role.Admin, Role.Authorized, Role.Manager)
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Post('add')
+  @Post()
   async createMenu(@Body() menuDTO: MenuDTO): Promise<MenuResponse> {
     menuDTO.menu_name[0].toUpperCase() +
       menuDTO.menu_name.substring(1).toLowerCase();
@@ -43,7 +43,7 @@ export class MenuController {
   @ApiResponse({ status: 200, type: MenuResponse })
   @HasRoles(Role.Admin, Role.Authorized, Role.Manager)
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Patch('update')
+  @Patch()
   async updateMenu(@Body() menuUpdate: MenuUpdateDTO): Promise<MenuResponse> {
     const menu = await this.menuService.findMenu({
       id: menuUpdate.id,

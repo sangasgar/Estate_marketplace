@@ -33,7 +33,7 @@ export class ProductTypeController {
   @ApiResponse({ status: 200, type: Product_TypeResponse })
   @HasRoles(Role.Manager, Role.Admin)
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Post('add')
+  @Post()
   async createProductType(
     @Body() productTypeDTO: ProductTypeDTO,
   ): Promise<Product_TypeResponse> {
@@ -51,7 +51,7 @@ export class ProductTypeController {
   @ApiResponse({ status: 200, type: Product_TypeResponse })
   @HasRoles(Role.Manager, Role.Admin)
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Patch('update')
+  @Patch()
   async updateProductType(
     @Body() productTypeUpdateDTO: ProductTypeUpdateDTO,
   ): Promise<Product_TypeResponse> {
@@ -87,7 +87,7 @@ export class ProductTypeController {
   @UseInterceptors(CacheInterceptor)
   @CacheTTL(30)
   @Get('all')
-  async getroductTypes(): Promise<Product_TypeResponse[]> {
-    return this.productTypeService.getroductTypes();
+  async getproductTypes(): Promise<Product_TypeResponse[]> {
+    return this.productTypeService.getproductTypes();
   }
 }

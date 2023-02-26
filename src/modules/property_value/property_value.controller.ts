@@ -1,12 +1,16 @@
 import {
   Body,
+  CacheInterceptor,
+  CacheTTL,
   Controller,
   Delete,
+  Get,
   HttpException,
   HttpStatus,
   Patch,
   Post,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AppError } from 'src/common/constant/error';
@@ -29,27 +33,27 @@ export class PropertyValueController {
   @ApiResponse({ status: 200, type: PropertyValueResponse })
   @HasRoles(Role.Manager, Role.Admin)
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Post('add')
+  @Post()
   async createPropertyValue(
     @Body()
     propertyValueDTO: PropertyValueDTO,
   ): Promise<PropertyValueResponse> {
     propertyValueDTO.properties_value_name =
       propertyValueDTO.properties_value_name.toLowerCase();
-    const findPropertyValue = await this.propertyValueService.findPropertyValue(
-      {
-        properties_value_name: propertyValueDTO.properties_value_name,
-      },
-    );
-    if (findPropertyValue)
-      throw new HttpException(AppError.PROPERTY_VALUE_FOUND, HttpStatus.FOUND);
+    // const findPropertyValue = await this.propertyValueService.findPropertyValue(
+    //   {
+    //     properties_value_name: propertyValueDTO.properties_value_name,
+    //   },
+    // );
+    // if (findPropertyValue)
+    //   throw new HttpException(AppError.PROPERTY_VALUE_FOUND, HttpStatus.FOUND);
     return this.propertyValueService.createPropertyValue(propertyValueDTO);
   }
   @ApiTags('PropertyValueAPI')
   @ApiResponse({ status: 200, type: PropertyValueResponse })
   @HasRoles(Role.Manager, Role.Admin)
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Patch('update')
+  @Patch()
   async updatePropertyValue(
     @Body()
     propertyValueDTO: PropertyValueUpdateDTO,
@@ -91,5 +95,13 @@ export class PropertyValueController {
     return this.propertyValueService.deletePropertyValue({
       id: propertyValueDeleteeDTO.id,
     });
+  }
+  @ApiTags('PropertyValueAPI')
+  @ApiResponse({ status: 200, type: PropertyValueResponse })
+  @UseInterceptors(CacheInterceptor)
+  @CacheTTL(30)
+  @Get('all')
+  async getroductValues(): Promise<PropertyValueResponse[]> {
+    return this.propertyValueService.getPropertyValue();
   }
 }

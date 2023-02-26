@@ -29,7 +29,7 @@ export class SearchHistoryController {
   @ApiResponse({ status: 200, type: SearchHistoryResponse })
   @HasRoles(Role.Admin, Role.Authorized, Role.Manager)
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Post('add')
+  @Post()
   async createSearchHistory(
     @Body() searchHistoryDTO: SearchHistoryDTO,
     @Req() request,

@@ -30,7 +30,7 @@ export class CompanyController {
   @ApiResponse({ status: 200, type: CompanyResponse })
   @HasRoles(Role.Admin, Role.Authorized, Role.Manager)
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Post('add')
+  @Post()
   async createCompany(
     @Body() companyCreateDTO: CompanyDTO,
     @Req() request,
@@ -61,7 +61,7 @@ export class CompanyController {
   @ApiResponse({ status: 200, type: CompanyUpdateDTO })
   @HasRoles(Role.Admin, Role.Authorized, Role.Manager)
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Patch('update')
+  @Patch()
   async updateCompany(@Body() updateCompany: CompanyUpdateDTO) {
     let findCompany = null;
     if (updateCompany.id_number) {

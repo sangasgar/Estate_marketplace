@@ -1,12 +1,16 @@
 import {
   Body,
+  CacheInterceptor,
+  CacheTTL,
   Controller,
   Delete,
+  Get,
   HttpException,
   HttpStatus,
   Patch,
   Post,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AppError } from 'src/common/constant/error';
@@ -29,7 +33,7 @@ export class PropertyNameController {
   @ApiResponse({ status: 200, type: PropertyNameResponse })
   @HasRoles(Role.Manager, Role.Admin)
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Post('add')
+  @Post()
   async createPropertyName(
     @Body()
     propertyNameDTO: PropertyNameDTO,
@@ -48,7 +52,7 @@ export class PropertyNameController {
   @ApiResponse({ status: 200, type: PropertyNameResponse })
   @HasRoles(Role.Manager, Role.Admin)
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Patch('update')
+  @Patch()
   async updatePropertyName(
     @Body()
     propertyNameDTO: PropertyNameUpdateDTO,
@@ -87,5 +91,13 @@ export class PropertyNameController {
     return this.propertyNameService.deletePropertyName({
       id: propertyNameDeleteeDTO.id,
     });
+  }
+  @ApiTags('PropertyNameAPI')
+  @ApiResponse({ status: 200, type: PropertyNameDTO })
+  @UseInterceptors(CacheInterceptor)
+  @CacheTTL(30)
+  @Get('all')
+  async getroductTypes(): Promise<PropertyNameResponse[]> {
+    return this.propertyNameService.getPropertyName();
   }
 }

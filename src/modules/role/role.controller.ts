@@ -26,7 +26,7 @@ export class RoleController {
   @ApiResponse({ status: 201, type: RoleResponse })
   @HasRoles(Role.Manager, Role.Authorized, Role.Admin)
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Post('add')
+  @Post()
   async createRole(@Body() roleDto: RoleDTO): Promise<RoleResponse> {
     roleDto.name[0].toUpperCase() + roleDto.name.substring(1).toLowerCase();
     const roleExist = await this.roleService.findRole(roleDto);
@@ -48,7 +48,7 @@ export class RoleController {
   @ApiResponse({ status: 200, type: RoleUpdateDTO })
   @HasRoles(Role.Manager, Role.Authorized, Role.Admin)
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Patch('update')
+  @Patch()
   async updateRole(@Body() roleDto: RoleUpdateDTO): Promise<boolean> {
     return this.roleService.updateRole(roleDto.id, roleDto.name);
   }

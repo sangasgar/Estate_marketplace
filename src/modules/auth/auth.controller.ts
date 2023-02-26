@@ -18,7 +18,7 @@ import { AuthService } from './auth.service';
 import { LoginDTO } from './dto';
 import { JwtAuthGuard, JwtRefreshTokenGuard } from './guards';
 import { AuthResponce, RefreshResponce, UpdateUserResponce } from './responce';
-
+import * as bcrypt from 'bcrypt';
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -43,6 +43,9 @@ export class AuthController {
     const user = await this.userService.findUser(dto.email);
     if (!user)
       throw new HttpException(AppError.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
+    const validateUser = await bcrypt.compare(dto.password, user.password);
+    if (!validateUser)
+      throw new HttpException(AppError.PASSWORD_WRONG, HttpStatus.BAD_GATEWAY);
     return this.authService.loginAuth(dto, user);
   }
   @UseGuards(JwtRefreshTokenGuard)

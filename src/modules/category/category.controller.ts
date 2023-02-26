@@ -29,7 +29,7 @@ export class CategoryController {
   @ApiResponse({ status: 200, type: CategoryResponse })
   @HasRoles(Role.Admin, Role.Authorized, Role.Manager)
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Post('add')
+  @Post()
   async createCategory(
     @Body() categoryDTO: CategoryDTO,
   ): Promise<CategoryResponse> {
@@ -46,7 +46,7 @@ export class CategoryController {
   @ApiResponse({ status: 200, type: CategoryResponse })
   @HasRoles(Role.Admin, Role.Authorized, Role.Manager)
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Patch('update')
+  @Patch()
   async updateCategory(
     @Body() categoryUpdate: CategoryUpdateDTO,
   ): Promise<CategoryResponse> {
