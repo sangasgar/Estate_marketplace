@@ -73,10 +73,6 @@ export class Product extends Model {
   product_type_id: Product_Type;
   @BelongsTo(() => Product_Type, 'product_type_id')
   product_type: Product_Type;
-  @ForeignKey(() => Company)
-  company_id: Company;
-  @BelongsTo(() => Company, 'company_id')
-  company: Company;
   @BelongsToMany(
     () => Wishlist,
     'Products_Wishlists',

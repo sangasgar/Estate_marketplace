@@ -25,11 +25,11 @@ export class ProductService {
   }
   async createProduct(propertyDTO: PropertyDTO): Promise<PropertyResponse> {
     try {
+      console.log(propertyDTO);
       const product = await this.productRepository.create({
         ...propertyDTO,
-        include: [Media_type, Tags],
       });
-      return product;
+      return;
     } catch (error) {
       throw new Error(error);
     }

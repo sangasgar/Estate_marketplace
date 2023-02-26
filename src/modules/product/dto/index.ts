@@ -14,64 +14,44 @@ export class PropertyDTO {
   @IsString()
   product_title: string;
   @ApiProperty()
-  @IsString()
   product_short_description: string;
   @ApiProperty()
   @IsString()
   product_description: string;
   @ApiProperty()
-  @IsBoolean()
   product_is_visible: boolean;
   @ApiProperty()
   @IsNumber()
   product_price: number;
   @ApiProperty()
-  @IsString()
   product_sku_developer: string;
   @ApiProperty()
-  @IsNumber()
   product_old_price: number;
   @ApiProperty()
-  @IsNumber()
   product_purchase_price: number;
   @ApiProperty()
   product_discount_percent: number;
   @ApiProperty()
-  @IsNumber()
   product_discount_price: number;
   @ApiProperty()
-  @IsNumber()
   product_quantity: number;
   @ApiProperty()
   @IsNumber()
   product_category_id: Category;
   @ApiProperty()
-  @IsString()
   product_keywords: string;
   @ApiProperty()
-  @IsNumber()
   product_type_id: Product_Type;
   @ApiProperty()
-  @IsNumber()
-  company_id: Company;
+  product_media_type: Media_type[];
   @ApiProperty()
-  @IsNumber()
-  product_media_type: Media_type;
-  @ApiProperty()
-  @IsString()
   product_description_meta: string;
   @ApiProperty()
-  @IsString()
   product_description_short_seo: string;
   @ApiProperty()
-  @IsString()
   product_description_seo: string;
   @ApiProperty()
-  @IsNumber()
-  tags: Tags;
-  @ApiProperty()
-  @IsString()
-  slug: string;
+  tags: Tags[];
 }
 
 export class PropertyUpdateDTO {
@@ -112,7 +92,7 @@ export class PropertyUpdateDTO {
   @ApiProperty()
   company_id?: Company;
   @ApiProperty()
-  product_media_type?: Media_type;
+  product_media_type?: Media_type[];
   @ApiProperty()
   product_description_meta?: string;
   @ApiProperty()
@@ -120,7 +100,7 @@ export class PropertyUpdateDTO {
   @ApiProperty()
   product_description_seo?: string;
   @ApiProperty()
-  tags?: Tags;
+  tags?: Tags[];
 }
 export class ProductDeleteDTO {
   @ApiProperty()

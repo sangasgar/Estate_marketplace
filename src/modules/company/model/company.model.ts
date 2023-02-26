@@ -32,11 +32,6 @@ export class Company extends Model {
     onUpdate: 'SET NULL',
   })
   leads: Leads[];
-  @HasMany(() => Product, {
-    onDelete: 'SET NULL',
-    onUpdate: 'SET NULL',
-  })
-  product: Product[];
 }
 @Table
 export class Company_Users extends Model {}

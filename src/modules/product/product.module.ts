@@ -21,7 +21,6 @@ import { ProductSeeds } from './seeds';
       Viewed,
       Product_Tags,
     ]),
-    SeederModule.forFeature([ProductSeeds]),
   ],
   providers: [ProductService],
   controllers: [ProductController],
