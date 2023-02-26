@@ -29,9 +29,9 @@ export class Product extends Model {
   @Column
   product_description: string;
   @Column
-  product_is_visible: boolean;
-  @Column
   product_sku_developer: string;
+  @Column
+  product_is_visible: boolean;
   @Column({ type: DataType.DOUBLE })
   product_price: number;
   @Column({ type: DataType.DOUBLE })

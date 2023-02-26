@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
+import { SeederModule } from 'nestjs-sequelize-seeder';
 import {
   Product,
   Products_Media_Types,
@@ -9,6 +10,7 @@ import {
 } from './model/product.model';
 import { ProductController } from './product.controller';
 import { ProductService } from './product.service';
+import { ProductSeeds } from './seeds';
 
 @Module({
   imports: [
@@ -19,6 +21,7 @@ import { ProductService } from './product.service';
       Viewed,
       Product_Tags,
     ]),
+    SeederModule.forFeature([ProductSeeds]),
   ],
   providers: [ProductService],
   controllers: [ProductController],
