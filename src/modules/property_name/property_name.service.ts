@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { transliteration } from 'src/config/translit';
+import { Property_Value } from '../property_value/model/property_value.model';
 import {
   PropertyNameDeleteeDTO,
   PropertyNameDTO,
@@ -53,6 +54,16 @@ export class PropertyNameService {
         id: propertyNameDTO.id,
       });
       return findPropertyName;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+  async getPropertyName(): Promise<PropertyNameResponse[]> {
+    try {
+      const productName = await this.propertyNameRepository.findAll({
+        include: Property_Value,
+      });
+      return productName;
     } catch (error) {
       throw new Error(error);
     }

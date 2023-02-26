@@ -31,7 +31,7 @@ export class PageController {
   @ApiResponse({ status: 200, type: PageResponse })
   @HasRoles(Role.Manager, Role.Authorized, Role.Admin)
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Post('add')
+  @Post()
   async createPage(@Body() pageDTO: PageDTO): Promise<PageResponse> {
     const findPage = await this.pageService.findPage({
       page_title: pageDTO.page_title,
@@ -44,7 +44,7 @@ export class PageController {
   @ApiResponse({ status: 200, type: PageResponse })
   @HasRoles(Role.Manager, Role.Authorized, Role.Admin)
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Patch('update')
+  @Patch()
   updatePage(@Body() updatePageDTO: UpdatePageDTO): Promise<PageResponse> {
     return this.pageService.updatePage(updatePageDTO);
   }

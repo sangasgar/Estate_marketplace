@@ -5,6 +5,8 @@ import { Product } from 'src/modules/product/model/product.model';
 export class Media_type extends Model {
   @Column
   media_type_name: string;
+  @Column
+  media_type_extension: string;
   @BelongsToMany(
     () => Product,
     'Products_Media_Types',

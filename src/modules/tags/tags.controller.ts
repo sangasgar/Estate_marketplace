@@ -29,7 +29,7 @@ export class TagsController {
   @ApiResponse({ status: 200, type: TagResponse })
   @HasRoles(Role.Manager, Role.Authorized, Role.Admin)
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Post('add')
+  @Post()
   async addTags(@Body() tagDTO: TagDTO): Promise<TagResponse> {
     tagDTO.tag_name = tagDTO.tag_name.toLowerCase();
     const tags = await this.tagService.findTag(tagDTO);
@@ -41,7 +41,7 @@ export class TagsController {
   @ApiResponse({ status: 200, type: TagResponse })
   @HasRoles(Role.Manager, Role.Authorized, Role.Admin)
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Patch('update')
+  @Patch()
   async updateTags(@Body() tagUpdateDTO: TagUpdateDTO): Promise<TagResponse> {
     tagUpdateDTO.tag_name = tagUpdateDTO.tag_name.toLowerCase();
     const tags = await this.tagService.findTag({ id: tagUpdateDTO.id });

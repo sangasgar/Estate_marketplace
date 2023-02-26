@@ -74,4 +74,12 @@ export class PropertyValueService {
       throw new Error(error);
     }
   }
+  async getPropertyValue(): Promise<PropertyValueResponse[]> {
+    try {
+      const productValue = await this.propertValueRepository.findAll();
+      return productValue;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
 }

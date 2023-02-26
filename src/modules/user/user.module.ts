@@ -6,7 +6,6 @@ import { Users } from './models/user.model';
 import { PersonModule } from '../person/person.module';
 import { SeederModule } from 'nestjs-sequelize-seeder';
 import { SeedUsers } from './seeds';
-
 @Module({
   imports: [
     PersonModule,

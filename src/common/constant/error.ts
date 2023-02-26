@@ -23,4 +23,11 @@ export const AppError = {
   PROPERTY_NAME_NOT_FOUND: 'Property name not found',
   PROPERTY_VALUE_FOUND: 'Property value exist',
   PROPERTY_VALUE_NOT_FOUND: 'Property value not found',
+  PASSWORD_WRONG: 'Password wrong',
+  MEDIA_TYPE_FOUND: 'Media type exist',
+  MEDIA_TYPE_NOT_FOUND: 'Media type not found',
+  LEAD_STATUS_FOUND: 'Lead status exist',
+  LEAD_STATUS_NOT_FOUND: 'Lead status not found',
+  LEAD_TYPE_FOUND: 'Lead type exist',
+  LEAD_TYPE_NOT_FOUND: 'Lead type not found',
 };

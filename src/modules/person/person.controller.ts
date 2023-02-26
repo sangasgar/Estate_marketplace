@@ -25,7 +25,7 @@ export class PersonController {
   @ApiResponse({ status: 200, type: PersonUpdateResponse })
   @HasRoles(Role.Manager, Role.Authorized, Role.Admin)
   @UseGuards(JwtAuthGuard)
-  @Patch('update')
+  @Patch()
   async updatePerson(
     @Body() personDTO: PersonUpdateDTO,
     @Req() request,

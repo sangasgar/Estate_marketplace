@@ -5,7 +5,6 @@ import { CreateUserDTO, UpdateUsername } from 'src/modules/user/dto';
 import { UserService } from 'src/modules/user/user.service';
 import { LoginDTO } from './dto';
 import { AuthResponce, RefreshResponce, UpdateUserResponce } from './responce';
-import * as bcrypt from 'bcrypt';
 @Injectable()
 export class AuthService {
   constructor(
@@ -27,9 +26,6 @@ export class AuthService {
   }
   async loginAuth(dto: LoginDTO, user): Promise<AuthResponce> {
     try {
-      const validateUser = await bcrypt.compare(dto.password, user.password);
-      if (!validateUser)
-        throw new BadRequestException(AppError.USER_WRONG_PASSWORD);
       const userFind = JSON.parse(
         JSON.stringify(await this.userService.publicUser(dto.email)),
       );
