@@ -12,6 +12,9 @@ import {
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AppError } from 'src/common/constant/error';
 import { JwtAuthGuard } from '../auth/guards';
+import { Role } from '../auth/guards/enums/role.enum';
+import { RolesGuard } from '../auth/guards/role.guard';
+import { HasRoles } from '../auth/guards/roles.decorator';
 import { RoleDeleteDTO, RoleDTO, RoleUpdateDTO } from './dto';
 import { RoleResponse, RolesResponse } from './response';
 import { RoleService } from './role.service';
@@ -21,7 +24,8 @@ export class RoleController {
   constructor(private readonly roleService: RoleService) {}
   @ApiTags('RolesAPI')
   @ApiResponse({ status: 201, type: RoleResponse })
-  @UseGuards(JwtAuthGuard)
+  @HasRoles(Role.Manager, Role.Authorized, Role.Admin)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Post('add')
   async createRole(@Body() roleDto: RoleDTO): Promise<RoleResponse> {
     roleDto.name[0].toUpperCase() + roleDto.name.substring(1).toLowerCase();
@@ -33,7 +37,8 @@ export class RoleController {
 
   @ApiTags('RolesAPI')
   @ApiResponse({ status: 200, type: RolesResponse })
-  @UseGuards(JwtAuthGuard)
+  @HasRoles(Role.Manager, Role.Authorized, Role.Admin)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('all')
   async findRole() {
     return this.roleService.findAllRole();
@@ -41,13 +46,16 @@ export class RoleController {
 
   @ApiTags('RolesAPI')
   @ApiResponse({ status: 200, type: RoleUpdateDTO })
-  @UseGuards(JwtAuthGuard)
+  @HasRoles(Role.Manager, Role.Authorized, Role.Admin)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Patch('update')
   async updateRole(@Body() roleDto: RoleUpdateDTO): Promise<boolean> {
     return this.roleService.updateRole(roleDto.id, roleDto.name);
   }
   @ApiTags('RolesAPI')
   @ApiResponse({ status: 200, type: RoleDeleteDTO })
+  @HasRoles(Role.Manager, Role.Authorized, Role.Admin)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Delete()
   async deleteRole(@Body() deleteRole: RoleDeleteDTO): Promise<boolean> {
     return this.roleService.deleteRole(deleteRole.id);

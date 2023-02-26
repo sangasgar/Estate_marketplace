@@ -1,5 +1,7 @@
 import {
   Body,
+  CacheInterceptor,
+  CacheTTL,
   Controller,
   Delete,
   Get,
@@ -8,6 +10,7 @@ import {
   Patch,
   Post,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AppError } from 'src/common/constant/error';
@@ -60,6 +63,8 @@ export class CategoryController {
 
   @ApiTags('CategoryApi')
   @ApiResponse({ status: 200, type: CategoryResponse })
+  @UseInterceptors(CacheInterceptor)
+  @CacheTTL(30)
   @Get('all')
   async getAllCategory(): Promise<CategoryResponse[]> {
     return this.categoryService.getAllCategory();

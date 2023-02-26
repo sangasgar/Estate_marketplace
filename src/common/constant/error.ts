@@ -19,4 +19,8 @@ export const AppError = {
   TAG_NOT_FOUND: 'Tag not found',
   PRODUCT_TYPE_FOUND: 'Product type exist',
   PRODUCT_TYPE_NOT_FOUND: 'Product type not found',
+  PROPERTY_NAME_FOUND: 'Property name exist',
+  PROPERTY_NAME_NOT_FOUND: 'Property name not found',
+  PROPERTY_VALUE_FOUND: 'Property value exist',
+  PROPERTY_VALUE_NOT_FOUND: 'Property value not found',
 };

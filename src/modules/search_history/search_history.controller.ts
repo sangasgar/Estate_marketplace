@@ -1,5 +1,7 @@
 import {
   Body,
+  CacheInterceptor,
+  CacheTTL,
   Controller,
   Delete,
   Get,
@@ -8,6 +10,7 @@ import {
   Post,
   Req,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AppError } from 'src/common/constant/error';
@@ -44,6 +47,8 @@ export class SearchHistoryController {
   }
   @ApiTags('SearchHistoryAPI')
   @ApiResponse({ status: 200, type: SearchHistoryResponse })
+  @UseInterceptors(CacheInterceptor)
+  @CacheTTL(30)
   @Get('all')
   async getAllSearchHistory(): Promise<SearchHistoryResponse[]> {
     return this.searchHistoryService.getSearchHistory();

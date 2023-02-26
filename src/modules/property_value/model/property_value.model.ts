@@ -14,7 +14,7 @@ export class Property_Value extends Model {
   @Column
   slug: string;
   @ForeignKey(() => Property_Name)
-  product_name_id: Property_Name;
+  properties_name_id: Property_Name;
   @BelongsTo(() => Property_Name, 'product_name_id')
-  product_name: Property_Name;
+  property_name: Property_Name;
 }

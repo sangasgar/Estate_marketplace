@@ -1,5 +1,7 @@
 import {
   Body,
+  CacheInterceptor,
+  CacheTTL,
   Controller,
   Delete,
   Get,
@@ -9,6 +11,7 @@ import {
   Post,
   Req,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { AppError } from 'src/common/constant/error';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -16,13 +19,17 @@ import { JwtAuthGuard } from 'src/modules/auth/guards';
 import { CompanyService } from './company.service';
 import { CompanyDTO, CompanyUpdateDTO, DeleteCompanyDTO } from './dto';
 import { CompanyResponse, StatusCompanyResponse } from './response';
+import { HasRoles } from '../auth/guards/roles.decorator';
+import { Role } from '../auth/guards/enums/role.enum';
+import { RolesGuard } from '../auth/guards/role.guard';
 
 @Controller('company')
 export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
   @ApiTags('CompanyApi')
-  @ApiResponse({ status: 200 })
-  @UseGuards(JwtAuthGuard)
+  @ApiResponse({ status: 200, type: CompanyResponse })
+  @HasRoles(Role.Admin, Role.Authorized, Role.Manager)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Post('add')
   async createCompany(
     @Body() companyCreateDTO: CompanyDTO,
@@ -40,16 +47,20 @@ export class CompanyController {
     return this.companyService.createCompany(companyCreateDTO);
   }
   @ApiTags('CompanyApi')
-  @ApiResponse({ status: 200 })
-  @UseGuards(JwtAuthGuard)
+  @ApiResponse({ status: 200, type: CompanyResponse })
+  @UseInterceptors(CacheInterceptor)
+  @CacheTTL(30)
+  @HasRoles(Role.Admin, Role.Authorized, Role.Manager)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('all')
-  async getCompanies() {
+  async getCompanies(): Promise<CompanyResponse[]> {
     return this.companyService.getCompanies();
   }
 
   @ApiTags('CompanyApi')
-  @ApiResponse({ status: 200 })
-  @UseGuards(JwtAuthGuard)
+  @ApiResponse({ status: 200, type: CompanyUpdateDTO })
+  @HasRoles(Role.Admin, Role.Authorized, Role.Manager)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Patch('update')
   async updateCompany(@Body() updateCompany: CompanyUpdateDTO) {
     let findCompany = null;
@@ -68,8 +79,9 @@ export class CompanyController {
     return this.companyService.updateCompany(updateCompany);
   }
   @ApiTags('CompanyApi')
-  @ApiResponse({ status: 200 })
-  @UseGuards(JwtAuthGuard)
+  @ApiResponse({ status: 200, type: StatusCompanyResponse })
+  @HasRoles(Role.Admin, Role.Authorized, Role.Manager)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Delete()
   async deleteCompany(
     @Body() deleteCompany: DeleteCompanyDTO,

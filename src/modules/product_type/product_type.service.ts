@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { transliteration } from 'src/config/translit';
+import { Property_Name } from '../property_name/model/property_name.model';
 import {
   ProductTypeDeleteDTO,
   ProductTypeDTO,
@@ -22,7 +23,9 @@ export class ProductTypeService {
     return product_type;
   }
   async getroductTypes(): Promise<Product_TypeResponse[]> {
-    const product_type = await this.productTypeRepository.findAll();
+    const product_type = await this.productTypeRepository.findAll({
+      include: Property_Name,
+    });
     return product_type;
   }
   async createProductType(
