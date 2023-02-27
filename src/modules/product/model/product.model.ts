@@ -22,7 +22,7 @@ export class Product extends Model {
   product_name: string;
   @Column
   product_title: string;
-  @Column
+  @Column({ unique: true, allowNull: false })
   product_frontend_id: string;
   @Column
   product_short_description: string;
@@ -30,7 +30,7 @@ export class Product extends Model {
   product_description: string;
   @Column
   product_sku_developer: string;
-  @Column
+  @Column({ defaultValue: true })
   product_is_visible: boolean;
   @Column({ type: DataType.DOUBLE })
   product_price: number;

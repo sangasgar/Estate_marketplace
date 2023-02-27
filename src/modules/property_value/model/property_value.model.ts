@@ -5,6 +5,7 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
+import { Product } from 'src/modules/product/model/product.model';
 import { Property_Name } from 'src/modules/property_name/model/property_name.model';
 
 @Table
