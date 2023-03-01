@@ -6,6 +6,7 @@ import {
   Products_Media_Types,
   Products_Wishlists,
   Product_Tags,
+  PropertyValue_Products,
   Viewed,
 } from './model/product.model';
 import { ProductController } from './product.controller';
@@ -20,6 +21,7 @@ import { ProductSeeds } from './seeds';
       Products_Wishlists,
       Viewed,
       Product_Tags,
+      PropertyValue_Products,
     ]),
   ],
   providers: [ProductService],

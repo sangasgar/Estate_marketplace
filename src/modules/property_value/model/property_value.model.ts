@@ -1,5 +1,6 @@
 import {
   BelongsTo,
+  BelongsToMany,
   Column,
   ForeignKey,
   Model,
@@ -18,4 +19,11 @@ export class Property_Value extends Model {
   properties_name_id: Property_Name;
   @BelongsTo(() => Property_Name, 'properties_name_id')
   property_name: Property_Name;
+  @BelongsToMany(
+    () => Product,
+    'PropertyValue_Products',
+    'property_value_id',
+    'product_id',
+  )
+  product: Product[];
 }

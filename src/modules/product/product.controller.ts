@@ -1,8 +1,12 @@
 import {
   Body,
+  CacheInterceptor,
+  CacheTTL,
   Controller,
+  Get,
   HttpException,
   HttpStatus,
+  Param,
   Post,
   Req,
   UploadedFile,
@@ -21,6 +25,7 @@ import { PropertyResponse } from './response';
 import { transliteration } from '../../config/translit';
 import { AppError } from 'src/common/constant/error';
 import { FilesInterceptor } from '@nestjs/platform-express';
+import { isString } from 'class-validator';
 
 @Controller('products')
 export class ProductController {
@@ -36,40 +41,6 @@ export class ProductController {
   ): Promise<PropertyResponse> {
     const user_id = request.user.id;
     propertyDTO['user_id'] = user_id;
-    // {
-    //     "product_name": "Property Dubai",
-    //     "product_title": "Property Dubai",
-    //     "product_short_description": "Dubai",
-    //     "product_description": "Property",
-    //     "product_is_visible": true,
-    //     "product_price": 15000000,
-    //     "product_sku_developer": "101",
-    //     "product_old_price": 15500000,
-    //     "product_purchase_price": 10000000,
-    //     "product_discount_percent": 20,
-    //     "product_discount_price": 13000000,
-    //     "product_quantity": 1,
-    //     "product_category_id": 1,
-    //     "product_keywords": "property",
-    //     "product_type_id": 1,
-    //     "company_id": 1,
-    //     "Media_type": [
-    //       {
-    //         "product_media_url": "url",
-    //         "product_id": 1,
-    //         "media_type_id": 1
-    //       }
-    //     ],
-    //     "product_description_meta": "property good",
-    //     "product_description_short_seo": "property",
-    //     "product_description_seo": "property",
-    //     "Tags": [
-    //       {
-    //         "tag_id": 1,
-    //         "product_id": 1
-    //       }
-    //     ]
-    //   }
     propertyDTO.product_name =
       propertyDTO.product_name[0].toUpperCase() +
       propertyDTO.product_name.substring(1).toLowerCase();
@@ -79,7 +50,7 @@ export class ProductController {
     const slug = transliteration(propertyDTO.product_name);
     propertyDTO['slug'] = slug;
     propertyDTO['product_frontend_id'] = Math.floor(
-      Math.random() * (999999999999 - 111111111111) + 111111111111,
+      Math.random() * (9999999999 - 1111111111) + 1111111111,
     );
     const findProduct = await this.productService.findProduct({
       product_name: propertyDTO.product_name,
@@ -88,7 +59,29 @@ export class ProductController {
       throw new HttpException(AppError.PRODUCT_FOUND, HttpStatus.FOUND);
     return this.productService.createProduct(propertyDTO);
   }
-
+  @Get(':slugOrId')
+  @UseInterceptors(CacheInterceptor)
+  @CacheTTL(30)
+  async getProduct(@Param('slugOrId') slugOrId: any, @Req() request) {
+    const user = request.user;
+    let findProduct;
+    const dto = {};
+    if (!Number(slugOrId)) {
+      dto['slug'] = slugOrId;
+      findProduct = await this.productService.findProduct({
+        slug: slugOrId,
+      });
+    }
+    if (Number(slugOrId)) {
+      dto['id'] = slugOrId;
+      findProduct = await this.productService.findProduct({
+        id: slugOrId,
+      });
+    }
+    if (!findProduct)
+      throw new HttpException(AppError.PRODUCT_NOT_FOUND, HttpStatus.NOT_FOUND);
+    return this.productService.getProduct(dto);
+  }
   @Post('uploads')
   @UseInterceptors(FilesInterceptor('files')) // 👈  using FilesInterceptor here
   @ApiConsumes('multipart/form-data')

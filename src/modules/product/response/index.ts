@@ -3,7 +3,6 @@ import { IsBoolean, IsNumber, IsString } from 'class-validator';
 import { Category } from 'src/modules/category/model/category.model';
 import { Company } from 'src/modules/company/model/company.model';
 import { Media_type } from 'src/modules/media_type/model/media_type.model';
-import { Product_Type } from 'src/modules/product_type/model/product_type.model';
 import { Tags } from 'src/modules/tags/model/tags.model';
 
 export class PropertyResponse {
@@ -48,9 +47,6 @@ export class PropertyResponse {
   @ApiProperty()
   @IsString()
   product_keywords: string;
-  @ApiProperty()
-  @IsNumber()
-  product_type_id: Product_Type;
   @ApiProperty()
   @IsNumber()
   company_id: Company;

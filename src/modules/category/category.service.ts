@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { transliteration } from 'src/config/translit';
 import { CategoryDeleteDTO, CategoryDTO, CategoryUpdateDTO } from './dto';
 import { Category } from './model/category.model';
 import { CategoryResponse, CategoryStatusResponse } from './response';
@@ -11,6 +12,8 @@ export class CategoryService {
   ) {}
   async createCategory(categoryDto: CategoryDTO): Promise<CategoryResponse> {
     try {
+      const slug = transliteration(categoryDto.category_name);
+      categoryDto['slug'] = slug;
       const category = await this.categoryRepository.create({ ...categoryDto });
       return category;
     } catch (error) {

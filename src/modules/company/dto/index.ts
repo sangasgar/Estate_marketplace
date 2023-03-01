@@ -3,8 +3,6 @@ import { IsObject, IsString } from 'class-validator';
 
 export class CompanyDTO {
   @ApiProperty()
-  user_id: number;
-  @ApiProperty()
   company_name: string;
   @ApiProperty()
   @IsString()

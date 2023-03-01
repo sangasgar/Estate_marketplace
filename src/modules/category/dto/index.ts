@@ -8,11 +8,7 @@ export class CategoryDTO {
   @IsString()
   category_name: string;
   @ApiProperty()
-  @IsString()
-  category_image: string;
-  @ApiProperty()
-  @IsString()
-  slug: string;
+  category_image?: string;
 }
 export class CategoryUpdateDTO {
   @ApiProperty()

@@ -38,13 +38,13 @@ export class UserService {
     try {
       dto.email[0].toUpperCase() + dto.email.substring(1).toLowerCase();
       dto.password = await this.hashPassword(dto.password);
-      const user = await this.userRepository.create({
+      const users = await this.userRepository.create({
         email: dto.email,
         password: dto.password,
         role_id: Role.Authorized,
       });
       await this.personService.createPerson({
-        user_id: user.id,
+        user_id: users.id,
       });
       return dto;
     } catch (error) {

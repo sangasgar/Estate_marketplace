@@ -31,7 +31,7 @@ export class PersonController {
     @Req() request,
   ): Promise<PersonUpdateResponse> {
     const { id } = request.user;
-    personDTO.user_id = id;
+    personDTO['user_id'] = id;
     return this.personService.updatePerson(personDTO);
   }
 
