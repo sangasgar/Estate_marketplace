@@ -43,7 +43,7 @@ export class PropertyValueService {
     propertyValueDTO: PropertyValueUpdateDTO,
   ): Promise<PropertyValueResponse> {
     try {
-      const propertyValue = await this.propertValueRepository.update(
+      await this.propertValueRepository.update(
         {
           ...propertyValueDTO,
         },

@@ -8,7 +8,6 @@ export class MenuDTO {
   @IsString()
   menu_name: string;
   @ApiProperty()
-  @IsString()
   menu_image: string;
   @ApiProperty()
   @IsString()

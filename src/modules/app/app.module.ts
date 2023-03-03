@@ -30,6 +30,7 @@ import {
   Products_Media_Types,
   Products_Wishlists,
   Product_Tags,
+  PropertyValue_Products,
   Viewed,
 } from '../product/model/product.model';
 import { MediaTypeModule } from 'src/modules/media_type/media_type.module';
@@ -37,10 +38,8 @@ import { Media_type } from '../media_type/model/media_type.model';
 import { Wishlist } from '../wishlist/model/wishlist.model';
 import { TagsModule } from '../tags/tags.module';
 import { Tags } from '../tags/model/tags.model';
-import { ProductTypeModule } from '../product_type/product_type.module';
 import { PropertyNameModule } from '../property_name/property_name.module';
 import { PropertyValueModule } from '../property_value/property_value.module';
-import { Product_Type } from '../product_type/model/product_type.model';
 import { Property_Name } from '../property_name/model/property_name.model';
 import { Property_Value } from '../property_value/model/property_value.model';
 import { Lead_Status } from '../lead_status/model/lead_status.model';
@@ -85,12 +84,12 @@ import { LeadsModule } from '../lead/leads.module';
           Viewed,
           Tags,
           Product_Tags,
-          Product_Type,
           Property_Name,
           Property_Value,
           Lead_Status,
           Lead_Type,
           Leads,
+          PropertyValue_Products,
         ],
       }),
       inject: [ConfigService],
@@ -109,7 +108,6 @@ import { LeadsModule } from '../lead/leads.module';
     ProductModule,
     MediaTypeModule,
     TagsModule,
-    ProductTypeModule,
     PropertyNameModule,
     PropertyValueModule,
     LeadStatusModule,

@@ -18,8 +18,12 @@ export class MenuService {
     }
   }
   async getAllMenu(): Promise<MenuResponse[]> {
-    const menu = await this.menuRepository.findAll();
-    return menu;
+    try {
+      const menu = await this.menuRepository.findAll();
+      return menu;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
   async findMenu(field): Promise<MenuResponse> {
     try {

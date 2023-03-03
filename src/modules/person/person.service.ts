@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { PersonDTO, PersonUpdateDTO } from './dto';
+import { PersonUpdateDTO } from './dto';
 import { Person } from './model/person.model';
 import { PersonResponse, PersonUpdateResponse } from './response';
 
@@ -19,20 +19,18 @@ export class PersonService {
       throw new Error(error);
     }
   }
-  async createPerson(personDTO: PersonDTO): Promise<PersonResponse> {
+  async createPerson(personCreate): Promise<PersonResponse> {
     try {
       await this.personRepository.create({
-        user_id: personDTO.user_id,
+        user_id: personCreate.user_id,
       });
-      const person = await this.findPerson(personDTO.user_id);
+      const person = await this.findPerson(personCreate.user_id);
       return person;
     } catch (error) {
       throw new Error(error);
     }
   }
-  async updatePerson(
-    personDTO: PersonUpdateDTO,
-  ): Promise<PersonUpdateResponse> {
+  async updatePerson(personDTO): Promise<PersonUpdateResponse> {
     personDTO.first_name =
       personDTO.first_name[0].toUpperCase() +
       personDTO.first_name.substring(1).toLowerCase();

@@ -12,9 +12,8 @@ import { Category } from 'src/modules/category/model/category.model';
 import { Users } from 'src/modules/user/models/user.model';
 import { Wishlist } from 'src/modules/wishlist/model/wishlist.model';
 import { Tags } from 'src/modules/tags/model/tags.model';
-import { Product_Type } from 'src/modules/product_type/model/product_type.model';
 import { Lead_Type } from 'src/modules/lead/model/lead.model';
-import { Company } from 'src/modules/company/model/company.model';
+import { Property_Value } from 'src/modules/property_value/model/property_value.model';
 
 @Table
 export class Product extends Model {
@@ -69,10 +68,6 @@ export class Product extends Model {
   user_id: Users;
   @BelongsTo(() => Users, 'user_id')
   user: Users;
-  @ForeignKey(() => Product_Type)
-  product_type_id: Product_Type;
-  @BelongsTo(() => Product_Type, 'product_type_id')
-  product_type: Product_Type;
   @BelongsToMany(
     () => Wishlist,
     'Products_Wishlists',
@@ -86,6 +81,13 @@ export class Product extends Model {
   tags: Tags[];
   @BelongsToMany(() => Lead_Type, 'Leads', 'product_id', 'lead_id')
   lead_type: Lead_Type[];
+  @BelongsToMany(
+    () => Property_Value,
+    'PropertyValue_Products',
+    'product_id',
+    'property_value_id',
+  )
+  property_value: Property_Value[];
 }
 
 @Table
@@ -99,3 +101,5 @@ export class Products_Wishlists extends Model {}
 export class Viewed extends Model {}
 @Table
 export class Product_Tags extends Model {}
+@Table
+export class PropertyValue_Products extends Model {}

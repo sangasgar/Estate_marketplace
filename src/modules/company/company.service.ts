@@ -31,7 +31,7 @@ export class CompanyService {
     }
   }
 
-  async createCompany(companyCreateDTO: CompanyDTO): Promise<CompanyResponse> {
+  async createCompany(companyCreateDTO): Promise<CompanyResponse> {
     try {
       const t = await this.sequelize.transaction();
       const company = await Company.create(
