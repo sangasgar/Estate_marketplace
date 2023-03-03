@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Category } from '../category/model/category.model';
-import { Media_type } from '../media_type/model/media_type.model';
+import { Company, Company_Users } from '../company/model/company.model';
+import { Property_Name } from '../property_name/model/property_name.model';
 import { Property_Value } from '../property_value/model/property_value.model';
 import { Tags } from '../tags/model/tags.model';
+import { Users } from '../user/models/user.model';
 import { ProductFindDTO, PropertyDTO } from './dto';
 import {
   Product,
@@ -24,8 +26,12 @@ export class ProductService {
     private readonly viewedRepository: typeof Viewed,
     @InjectModel(Product_Tags)
     private readonly productTagsRepository: typeof Product_Tags,
+    @InjectModel(Tags)
+    private readonly tagsRepository: typeof Tags,
     @InjectModel(PropertyValue_Products)
     private readonly propertyValueProductsRepository: typeof PropertyValue_Products,
+    @InjectModel(Users)
+    private readonly userRepository: typeof Users,
   ) {}
   async findProduct(field) {
     try {
@@ -59,17 +65,63 @@ export class ProductService {
       throw new Error(error);
     }
   }
-  async getProduct(productFindDTO: ProductFindDTO) {
-    const product = await this.productRepository.findOne({
-      include: [{ model: Category }],
-      where: { ...productFindDTO },
-    });
-    Tags.hasMany(Product_Tags, { foreignKey: 'tag_id' });
-    const tagsId = await this.productTagsRepository.findAll({
-      include: Tags,
-      where: { product_id: product.id },
-    });
-    console.log(tagsId);
-    return product;
+
+  async getProduct(
+    productFindDTO: ProductFindDTO,
+    user_id: number,
+  ): Promise<PropertyResponse> {
+    try {
+      Product.belongsToMany(Tags, {
+        through: Product_Tags,
+        foreignKey: 'product_id',
+        otherKey: 'tag_id',
+      });
+      Product.belongsToMany(Property_Value, {
+        through: PropertyValue_Products,
+        foreignKey: 'product_id',
+        otherKey: 'property_value_id',
+      });
+      Users.belongsToMany(Company, {
+        through: Company_Users,
+        foreignKey: 'user_id',
+        otherKey: 'company_id',
+      });
+      const product = await this.productRepository.findAll({
+        attributes: { exclude: ['product_category_id'] },
+        include: [
+          { model: Category },
+          {
+            model: Tags,
+            as: 'tags',
+          },
+          {
+            model: Property_Value,
+            as: 'property_value',
+            include: [{ model: Property_Name }],
+          },
+        ],
+        where: { ...productFindDTO },
+      });
+      const userCompany = await this.userRepository.findOne({
+        where: { id: user_id },
+        attributes: [],
+        include: [
+          {
+            model: Company,
+            as: 'company',
+          },
+        ],
+      });
+      if (user_id) {
+        await this.viewedRepository.findOrCreate({
+          where: { user_id, product_id: product[0].id },
+        });
+      }
+      const getProduct = JSON.parse(JSON.stringify(product[0]));
+      getProduct['company'] = JSON.parse(JSON.stringify(userCompany.company));
+      return getProduct;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 }

@@ -4,6 +4,7 @@ import {
   CacheTTL,
   Controller,
   Get,
+  Headers,
   HttpException,
   HttpStatus,
   Param,
@@ -25,11 +26,14 @@ import { PropertyResponse } from './response';
 import { transliteration } from '../../config/translit';
 import { AppError } from 'src/common/constant/error';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { isString } from 'class-validator';
+import { TokenService } from '../token/token.service';
 
 @Controller('products')
 export class ProductController {
-  constructor(private readonly productService: ProductService) {}
+  constructor(
+    private readonly productService: ProductService,
+    private readonly tokenService: TokenService,
+  ) {}
   @ApiTags('ProductApi')
   @ApiResponse({ status: 200 })
   @HasRoles(Role.Manager, Role.Authorized, Role.Admin)
@@ -62,10 +66,14 @@ export class ProductController {
   @Get(':slugOrId')
   @UseInterceptors(CacheInterceptor)
   @CacheTTL(30)
-  async getProduct(@Param('slugOrId') slugOrId: any, @Req() request) {
-    const user = request.user;
+  async getProduct(
+    @Param('slugOrId') slugOrId: any,
+    @Headers() headers,
+  ): Promise<PropertyResponse> {
     let findProduct;
     const dto = {};
+
+    const user = await this.tokenService.decodeJWT(headers.authorization);
     if (!Number(slugOrId)) {
       dto['slug'] = slugOrId;
       findProduct = await this.productService.findProduct({
@@ -80,7 +88,7 @@ export class ProductController {
     }
     if (!findProduct)
       throw new HttpException(AppError.PRODUCT_NOT_FOUND, HttpStatus.NOT_FOUND);
-    return this.productService.getProduct(dto);
+    return this.productService.getProduct(dto, user.id);
   }
   @Post('uploads')
   @UseInterceptors(FilesInterceptor('files')) // 👈  using FilesInterceptor here

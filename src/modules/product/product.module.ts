@@ -1,6 +1,9 @@
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { SeederModule } from 'nestjs-sequelize-seeder';
+import { Tags } from '../tags/model/tags.model';
+import { TokenModule } from '../token/token.module';
+import { Users } from '../user/models/user.model';
 import {
   Product,
   Products_Media_Types,
@@ -22,7 +25,10 @@ import { ProductSeeds } from './seeds';
       Viewed,
       Product_Tags,
       PropertyValue_Products,
+      Tags,
+      Users,
     ]),
+    TokenModule,
   ],
   providers: [ProductService],
   controllers: [ProductController],

@@ -49,7 +49,7 @@ export class PropertyResponse {
   product_keywords: string;
   @ApiProperty()
   @IsNumber()
-  company_id: Company;
+  company: Company[];
   @ApiProperty()
   @IsNumber()
   product_media_type: Media_type[];

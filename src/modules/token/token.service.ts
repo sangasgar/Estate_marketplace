@@ -15,6 +15,12 @@ export class TokenService {
       expiresIn: this.configService.get('expire_jwt'),
     });
   }
+
+  async decodeJWT(token) {
+    const user = this.jwtService.decode(token.split(' ')[1]);
+    const userObject = JSON.parse(JSON.stringify(user));
+    return { id: userObject.user.id, email: userObject.user.email };
+  }
   async getRefreshToken(user) {
     const payload = { user };
     return this.jwtService.sign(payload, {
