@@ -69,3 +69,8 @@ export class PropertyResponse {
   @IsString()
   slug: string;
 }
+export class ProductDeleteResponse {
+  @ApiProperty()
+  @IsBoolean()
+  status: boolean;
+}
