@@ -71,14 +71,13 @@ export class PropertyUpdateDTO {
   @ApiProperty()
   product_price?: number;
   @ApiProperty()
-  @IsString()
   product_sku_developer?: string;
   @ApiProperty()
-  product_old_price?: number;
+  product_old_price: number;
   @ApiProperty()
   product_purchase_price?: number;
   @ApiProperty()
-  product_discount_percent?: number;
+  product_discount_percent: number;
   @ApiProperty()
   product_discount_price?: number;
   @ApiProperty()
@@ -88,9 +87,9 @@ export class PropertyUpdateDTO {
   @ApiProperty()
   property_values_id?: PropertyValue_Products[];
   @ApiProperty()
-  product_keywords?: string;
+  property_values_delete_id?: PropertyValue_Products[];
   @ApiProperty()
-  company_id?: Company;
+  product_keywords?: string;
   @ApiProperty()
   product_media_type?: Media_type[];
   @ApiProperty()
@@ -99,6 +98,8 @@ export class PropertyUpdateDTO {
   product_description_short_seo?: string;
   @ApiProperty()
   product_description_seo?: string;
+  @ApiProperty()
+  tags_delete_id?: Tags[];
   @ApiProperty()
   tags_id?: Tags[];
 }

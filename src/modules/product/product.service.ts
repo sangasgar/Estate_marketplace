@@ -6,7 +6,12 @@ import { Property_Name } from '../property_name/model/property_name.model';
 import { Property_Value } from '../property_value/model/property_value.model';
 import { Tags } from '../tags/model/tags.model';
 import { Users } from '../user/models/user.model';
-import { ProductFindDTO, PropertyDTO } from './dto';
+import {
+  ProductDeleteDTO,
+  ProductFindDTO,
+  PropertyDTO,
+  PropertyUpdateDTO,
+} from './dto';
 import {
   Product,
   Products_Media_Types,
@@ -14,7 +19,7 @@ import {
   PropertyValue_Products,
   Viewed,
 } from './model/product.model';
-import { PropertyResponse } from './response';
+import { ProductDeleteResponse, PropertyResponse } from './response';
 
 @Injectable()
 export class ProductService {
@@ -68,7 +73,7 @@ export class ProductService {
 
   async getProduct(
     productFindDTO: ProductFindDTO,
-    user_id: number,
+    user_id?: number,
   ): Promise<PropertyResponse> {
     try {
       Product.belongsToMany(Tags, {
@@ -103,7 +108,7 @@ export class ProductService {
         where: { ...productFindDTO },
       });
       const userCompany = await this.userRepository.findOne({
-        where: { id: user_id },
+        where: { id: product[0].user_id },
         attributes: [],
         include: [
           {
@@ -119,6 +124,66 @@ export class ProductService {
       }
       const getProduct = JSON.parse(JSON.stringify(product[0]));
       getProduct['company'] = JSON.parse(JSON.stringify(userCompany.company));
+      return getProduct;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+  async deleteProduct(
+    propertyDTO: ProductDeleteDTO,
+  ): Promise<ProductDeleteResponse> {
+    const deleteProduct = await this.productRepository.destroy({
+      where: { id: propertyDTO.id },
+    });
+    if (deleteProduct) {
+      return { status: true };
+    }
+    if (!deleteProduct) {
+      return { status: false };
+    }
+  }
+  async updateProduct(
+    propertyDTO: PropertyUpdateDTO,
+  ): Promise<PropertyResponse> {
+    try {
+      await this.productRepository.update(
+        {
+          ...propertyDTO,
+        },
+        { where: { id: propertyDTO.id } },
+      );
+      const product = await this.productRepository.findOne({
+        where: { id: propertyDTO.id },
+      });
+      if (propertyDTO.tags_id) {
+        const tagsArray = propertyDTO.tags_id.map((el) => ({
+          tag_id: el,
+          product_id: product.id,
+        }));
+        await this.productTagsRepository.bulkCreate(tagsArray, {
+          updateOnDuplicate: ['tag_id'],
+        });
+      }
+      if (propertyDTO.tags_delete_id) {
+        await this.productTagsRepository.destroy({
+          where: { tag_id: propertyDTO.tags_delete_id },
+        });
+      }
+      if (propertyDTO.property_values_delete_id) {
+        await this.propertyValueProductsRepository.destroy({
+          where: { property_value_id: propertyDTO.property_values_delete_id },
+        });
+      }
+      if (propertyDTO.property_values_id) {
+        const propertydArray = propertyDTO.property_values_id.map((el) => ({
+          property_value_id: el,
+          product_id: product.id,
+        }));
+        await this.propertyValueProductsRepository.bulkCreate(propertydArray, {
+          updateOnDuplicate: ['property_value_id'],
+        });
+      }
+      const getProduct = await this.getProduct({ id: product.id });
       return getProduct;
     } catch (error) {
       throw new Error(error);

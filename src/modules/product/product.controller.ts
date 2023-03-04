@@ -3,11 +3,13 @@ import {
   CacheInterceptor,
   CacheTTL,
   Controller,
+  Delete,
   Get,
   Headers,
   HttpException,
   HttpStatus,
   Param,
+  Patch,
   Post,
   Req,
   UploadedFile,
@@ -15,14 +17,20 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiBody, ApiConsumes, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiConsumes,
+  ApiProperty,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards';
 import { Role } from '../auth/guards/enums/role.enum';
 import { RolesGuard } from '../auth/guards/role.guard';
 import { HasRoles } from '../auth/guards/roles.decorator';
-import { PropertyDTO } from './dto';
+import { ProductDeleteDTO, PropertyDTO, PropertyUpdateDTO } from './dto';
 import { ProductService } from './product.service';
-import { PropertyResponse } from './response';
+import { ProductDeleteResponse, PropertyResponse } from './response';
 import { transliteration } from '../../config/translit';
 import { AppError } from 'src/common/constant/error';
 import { FilesInterceptor } from '@nestjs/platform-express';
@@ -35,7 +43,7 @@ export class ProductController {
     private readonly tokenService: TokenService,
   ) {}
   @ApiTags('ProductApi')
-  @ApiResponse({ status: 200 })
+  @ApiResponse({ status: 200, type: PropertyResponse })
   @HasRoles(Role.Manager, Role.Authorized, Role.Admin)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Post()
@@ -63,6 +71,8 @@ export class ProductController {
       throw new HttpException(AppError.PRODUCT_FOUND, HttpStatus.FOUND);
     return this.productService.createProduct(propertyDTO);
   }
+  @ApiTags('ProductApi')
+  @ApiResponse({ status: 200, type: PropertyResponse })
   @Get(':slugOrId')
   @UseInterceptors(CacheInterceptor)
   @CacheTTL(30)
@@ -90,6 +100,37 @@ export class ProductController {
       throw new HttpException(AppError.PRODUCT_NOT_FOUND, HttpStatus.NOT_FOUND);
     return this.productService.getProduct(dto, user.id);
   }
+  @ApiTags('ProductApi')
+  @ApiResponse({ status: 200, type: PropertyResponse })
+  @HasRoles(Role.Admin, Role.Authorized, Role.Manager)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Patch()
+  async updateProduct(
+    @Body() propertyDTO: PropertyUpdateDTO,
+  ): Promise<PropertyResponse> {
+    const findProduct = await this.productService.findProduct({
+      id: propertyDTO.id,
+    });
+    if (!findProduct)
+      throw new HttpException(AppError.PRODUCT_NOT_FOUND, HttpStatus.NOT_FOUND);
+    return this.productService.updateProduct(propertyDTO);
+  }
+  @ApiTags('ProductApi')
+  @ApiResponse({ status: 200, type: PropertyResponse })
+  @HasRoles(Role.Admin, Role.Authorized, Role.Manager)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Delete()
+  async deleteProduct(
+    @Body() propertyDTO: ProductDeleteDTO,
+  ): Promise<ProductDeleteResponse> {
+    const findProduct = await this.productService.findProduct({
+      id: propertyDTO.id,
+    });
+    if (!findProduct)
+      throw new HttpException(AppError.PRODUCT_NOT_FOUND, HttpStatus.NOT_FOUND);
+    return this.productService.deleteProduct(propertyDTO);
+  }
+
   @Post('uploads')
   @UseInterceptors(FilesInterceptor('files')) // 👈  using FilesInterceptor here
   @ApiConsumes('multipart/form-data')
