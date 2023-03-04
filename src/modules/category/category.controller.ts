@@ -27,7 +27,7 @@ export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
   @ApiTags('CategoryApi')
   @ApiResponse({ status: 200, type: CategoryResponse })
-  @HasRoles(Role.Admin, Role.Authorized, Role.Manager)
+  @HasRoles(Role.Admin, Role.Manager)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Post()
   async createCategory(
@@ -65,7 +65,7 @@ export class CategoryController {
   @ApiResponse({ status: 200, type: CategoryResponse })
   @UseInterceptors(CacheInterceptor)
   @CacheTTL(30)
-  @Get('all')
+  @Get()
   async getAllCategory(): Promise<CategoryResponse[]> {
     return this.categoryService.getAllCategory();
   }
