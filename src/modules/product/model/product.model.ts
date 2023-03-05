@@ -4,6 +4,7 @@ import {
   Column,
   DataType,
   ForeignKey,
+  HasMany,
   Model,
   Table,
 } from 'sequelize-typescript';
@@ -12,7 +13,7 @@ import { Category } from 'src/modules/category/model/category.model';
 import { Users } from 'src/modules/user/models/user.model';
 import { Wishlist } from 'src/modules/wishlist/model/wishlist.model';
 import { Tags } from 'src/modules/tags/model/tags.model';
-import { Lead_Type } from 'src/modules/lead/model/lead.model';
+import { Leads, Lead_Type } from 'src/modules/lead/model/lead.model';
 import { Property_Value } from 'src/modules/property_value/model/property_value.model';
 
 @Table
@@ -68,6 +69,8 @@ export class Product extends Model {
   user_id: Users;
   @BelongsTo(() => Users, 'user_id')
   user: Users;
+  @HasMany(() => Leads, 'product_id')
+  lead: Leads;
   @BelongsToMany(
     () => Wishlist,
     'Products_Wishlists',
@@ -79,8 +82,6 @@ export class Product extends Model {
   user_viewed: Users[];
   @BelongsToMany(() => Tags, 'Product_Tags', 'product_id', 'tag_id')
   tags: Tags[];
-  @BelongsToMany(() => Lead_Type, 'Leads', 'product_id', 'lead_id')
-  lead_type: Lead_Type[];
   @BelongsToMany(
     () => Property_Value,
     'PropertyValue_Products',

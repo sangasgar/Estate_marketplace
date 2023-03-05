@@ -28,6 +28,7 @@ import { ProductSeeds } from './seeds';
       Tags,
       Users,
     ]),
+    SeederModule.forFeature([ProductSeeds]),
     TokenModule,
   ],
   providers: [ProductService],

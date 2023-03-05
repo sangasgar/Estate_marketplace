@@ -16,8 +16,6 @@ export class Lead_Type extends Model {
   lead_type_name: string;
   @Column
   price: number;
-  @BelongsToMany(() => Product, 'Leads', 'lead_id', 'product_id')
-  product: Product[];
 }
 @Table
 export class Leads extends Model {
@@ -29,6 +27,10 @@ export class Leads extends Model {
   email: string;
   @Column
   comment: string;
+  @ForeignKey(() => Product)
+  product_id: Product;
+  @BelongsTo(() => Product, 'product_id')
+  product: Product;
   @ForeignKey(() => Company)
   company_id: Company;
   @BelongsTo(() => Company, 'company_id')
