@@ -1,14 +1,28 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { LeadTypeDeleteDTO, LeadTypeDTO, LeadTypeUpdateDTO } from './dto';
-import { Lead_Type } from './model/lead.model';
-import { LeadTypeResponse, LeadTypeStatusResponse } from './response';
+import { join } from 'path';
+import { MailService } from '../mail/mail.service';
+import {
+  LeadsDTO,
+  LeadTypeDeleteDTO,
+  LeadTypeDTO,
+  LeadTypeUpdateDTO,
+} from './dto';
+import { Leads, Lead_Type } from './model/lead.model';
+import {
+  LeadsResponse,
+  LeadStatusResponse,
+  LeadTypeResponse,
+} from './response';
 
 @Injectable()
 export class LeadsService {
   constructor(
+    private readonly mailService: MailService,
     @InjectModel(Lead_Type)
     private readonly leadTypeRepository: typeof Lead_Type,
+    @InjectModel(Leads)
+    private readonly leadsRepository: typeof Leads,
   ) {}
   async findLeadType(field) {
     try {
@@ -48,7 +62,7 @@ export class LeadsService {
   }
   async deleteLeadType(
     leadTypeDTO: LeadTypeDeleteDTO,
-  ): Promise<LeadTypeStatusResponse> {
+  ): Promise<LeadStatusResponse> {
     try {
       this.leadTypeRepository.destroy({ where: { id: leadTypeDTO.id } });
 
@@ -64,5 +78,26 @@ export class LeadsService {
     } catch (error) {
       throw new Error(error);
     }
+  }
+  async createLead(leadDto: LeadsDTO): Promise<LeadStatusResponse> {
+    const lead = await this.leadsRepository.create({
+      ...leadDto,
+      company_id: 1,
+      product_id: 1,
+      lead_id: 1,
+      lead_status_id: 1,
+    });
+    this.mailService.sendLead({
+      name: lead.name,
+      phone: lead.phone,
+      email: lead.email,
+      comment: lead.comment,
+    });
+    if (lead) return { status: true };
+    if (!lead) return { status: false };
+  }
+  async getLeads(): Promise<LeadsResponse[]> {
+    const leads = await this.leadsRepository.findAll();
+    return leads;
   }
 }

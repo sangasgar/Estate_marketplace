@@ -18,11 +18,20 @@ import { JwtAuthGuard } from '../auth/guards';
 import { Role } from '../auth/guards/enums/role.enum';
 import { RolesGuard } from '../auth/guards/role.guard';
 import { HasRoles } from '../auth/guards/roles.decorator';
-import { LeadTypeDeleteDTO, LeadTypeDTO, LeadTypeUpdateDTO } from './dto';
+import {
+  LeadsDTO,
+  LeadTypeDeleteDTO,
+  LeadTypeDTO,
+  LeadTypeUpdateDTO,
+} from './dto';
 import { LeadsService } from './leads.service';
-import { LeadTypeResponse, LeadTypeStatusResponse } from './response';
+import {
+  LeadsResponse,
+  LeadStatusResponse,
+  LeadTypeResponse,
+} from './response';
 
-@Controller('lead-type')
+@Controller('leads')
 export class LeadsController {
   constructor(private readonly leadsService: LeadsService) {}
   @ApiTags('LeadTypeAPI')
@@ -66,13 +75,13 @@ export class LeadsController {
     return await this.leadsService.updateLeadType(leadTypeDTO);
   }
   @ApiTags('LeadTypeAPI')
-  @ApiResponse({ status: 200, type: LeadTypeStatusResponse })
+  @ApiResponse({ status: 200, type: LeadStatusResponse })
   @HasRoles(Role.Manager, Role.Admin)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Delete()
   async deleteLeadType(
     @Body() leadTypeDTO: LeadTypeDeleteDTO,
-  ): Promise<LeadTypeStatusResponse> {
+  ): Promise<LeadStatusResponse> {
     const leadType = await this.leadsService.findLeadType({
       id: leadTypeDTO.id,
     });
@@ -90,5 +99,19 @@ export class LeadsController {
   @Get('all')
   async getLeadType(): Promise<LeadTypeResponse[]> {
     return this.leadsService.getLeadType();
+  }
+  @ApiTags('LeadsAPI')
+  @ApiResponse({ status: 200, type: LeadStatusResponse })
+  @Post('add-lead')
+  async addLead(@Body() leadDto: LeadsDTO): Promise<LeadStatusResponse> {
+    return this.leadsService.createLead(leadDto);
+  }
+  @ApiTags('LeadsAPI')
+  @ApiResponse({ status: 200, type: LeadStatusResponse })
+  @HasRoles(Role.Manager, Role.Admin)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Get('leads-all')
+  async getLead(): Promise<LeadsResponse[]> {
+    return this.leadsService.getLeads();
   }
 }

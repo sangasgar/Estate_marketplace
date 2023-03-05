@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsString } from 'class-validator';
+import { IsEmail, IsNumber, IsString } from 'class-validator';
 
 export class LeadTypeDTO {
   @ApiProperty()
@@ -21,4 +21,16 @@ export class LeadTypeDeleteDTO {
   @ApiProperty()
   @IsNumber()
   id: number;
+}
+export class LeadsDTO {
+  @ApiProperty()
+  @IsString()
+  name: string;
+  @ApiProperty()
+  @IsString()
+  phone: string;
+  @ApiProperty()
+  email: string;
+  @ApiProperty()
+  comment: string;
 }
