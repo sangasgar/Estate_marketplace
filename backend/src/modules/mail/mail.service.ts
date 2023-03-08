@@ -24,7 +24,7 @@ export class MailService {
     await this.mailerService.sendMail({
       to: 'info@tobuyestate.com',
       // from: '"Support Team" <support@example.com>', // override default from
-      subject: 'Welcome to Nice App! Confirm your Email',
+      subject: 'Заявка с сайта на подбор недвижимости',
       template: './leads', // `.hbs` extension is appended automatically
       context: {
         // ✏️ filling curly brackets with content

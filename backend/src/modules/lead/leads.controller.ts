@@ -107,7 +107,7 @@ export class LeadsController {
     return this.leadsService.createLead(leadDto);
   }
   @ApiTags('LeadsAPI')
-  @ApiResponse({ status: 200, type: LeadStatusResponse })
+  @ApiResponse({ status: 200, type: LeadsResponse })
   @HasRoles(Role.Manager, Role.Admin)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('leads-all')
